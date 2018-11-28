@@ -69,7 +69,6 @@ function handleCancelClick(){
  * @calls clearAddStudentFormInputs, updateStudentList
  */
 function addStudent(){
-      //var newStudent = {};
       newStudent.name = $('#studentName').val();
       newStudent.course = $('#course').val();
       newStudent.grade = $('#studentGrade').val(); 
@@ -77,9 +76,9 @@ function addStudent(){
             alert("invalid input")
       }
       studentArray.push(newStudent)
-      console.log(studentArray)
       updateStudentList(studentArray)
       clearAddStudentFormInputs();
+   
       
 }
 /***************************************************************************************************
@@ -95,16 +94,21 @@ function clearAddStudentFormInputs(){
  * @param {object} studentObj a single student object with course, name, and grade inside
  */
 function renderStudentOnDom(studentObj){
-     var nameTableData = $('<td>').text(studentObj.name);
-//      var nameTableData = $('<td>',{
-//                   class: 'col-xs-3 col-sm-3',
-//                   text: studentObj.name,
-//                   'text-align': 'center'
-//      });
-     var gradeTableData = $('<td>').text(studentObj.grade);
-     var courseTableData = $('<td>').text(studentObj.course);
-     var newTableRow = $('<tr>').append(nameTableData, gradeTableData, courseTableData);
-
+      var nameTableData = $('<td>',{
+                   class: 'col-xs-3 col-sm-3',
+                   text: studentObj.name,
+                   'text-align': 'center'
+      });
+     var gradeTableData = $('<td>',{
+                  class: 'col-xs-3 col-sm-3',
+                  text: studentObj.grade,
+                  'text-align': 'center'
+     })
+     var courseTableData = $('<td>,',{
+                  class: 'col-xs-3 col-sm-3',
+                  text: studentObj.course,
+                  'text-align': 'center'
+     })
      var deleteButton = $('<button>',{
                   class: 'btn btn-danger',
                   text: 'Delete',
@@ -115,16 +119,16 @@ function renderStudentOnDom(studentObj){
      })
      
      var buttonTd = $('<td>',{class: 'col-xs-3 col-sm-3'}).append(deleteButton)
-     var newTableRow = $('<tr').append(nameTableData, courseTableData, gradeTableData, buttonTd)
+     var newTableRow = $('<tr>').append(nameTableData, courseTableData, gradeTableData, buttonTd)
      $('tbody').append(newTableRow);
-
-
-     function handleDeleteClicked(){
-      var studentIndex = studentArray.indexOf(studentObj)
-      studentArray.splice(studentIndex, 1)
-      newTableRow.remove()
-     }
      
+
+
+      function handleDeleteClicked(){
+            var studentIndex = studentArray.indexOf(studentObj)
+            studentArray.splice(studentIndex, 1)
+            newTableRow.remove()
+     }
      
      
      
