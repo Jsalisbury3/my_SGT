@@ -8,7 +8,7 @@
  */
 
 var studentArray = [];
-var newStudent = {};
+
 
 $(document).ready();
 
@@ -69,23 +69,24 @@ function handleCancelClick(){
  * @calls clearAddStudentFormInputs, updateStudentList
  */
 function addStudent(){
+      var newStudent = {};
       newStudent.name = $('#studentName').val();
       newStudent.course = $('#course').val();
       newStudent.grade = $('#studentGrade').val(); 
       if(newStudent.name ==='' || newStudent.course ===''|| parseFloat(newStudent.grade<=0) || parseFloat(newStudent.course> 100) || isNaN(newStudent.grade)){
-            alert("invalid input")
+            alert("invalid input");
+            return;
       }
-      studentArray.push(newStudent)
-      updateStudentList(studentArray)
+      studentArray.push(newStudent);
+      console.log(studentArray);
+      updateStudentList(studentArray);
       clearAddStudentFormInputs();
-   
-      
 }
 /***************************************************************************************************
  * clearAddStudentForm - clears out the form values based on inputIds variable
  */
 function clearAddStudentFormInputs(){
-      console.log('clear add student')
+      console.log('clear add student');
       $('input').val(' ');
 }
 /***************************************************************************************************
@@ -117,25 +118,16 @@ function renderStudentOnDom(studentObj){
                         click: handleDeleteClicked
                   }
      })
-     
-     var buttonTd = $('<td>',{class: 'col-xs-3 col-sm-3'}).append(deleteButton)
-     var newTableRow = $('<tr>').append(nameTableData, courseTableData, gradeTableData, buttonTd)
+     var buttonTd = $('<td>',{class: 'col-xs-3 col-sm-3'}).append(deleteButton);
+     var newTableRow = $('<tr>').append(nameTableData, courseTableData, gradeTableData, buttonTd);
      $('tbody').append(newTableRow);
      
-
-
       function handleDeleteClicked(){
-            var studentIndex = studentArray.indexOf(studentObj)
-            studentArray.splice(studentIndex, 1)
-            newTableRow.remove()
+            var studentIndex = studentArray.indexOf(studentObj);
+            studentArray.splice(studentIndex, 1);
+            newTableRow.remove();
+            calculateGradeAverage(studentArray);
      }
-     
-     
-     
-     //$('tbody>tr').remove();
-     //clearAddStudentFormInputs();
-
-
 }
 
 /***************************************************************************************************
@@ -151,7 +143,6 @@ function updateStudentList(updatingStudentArray){
             console.log(updatingStudentArray[studentIndex])
             renderStudentOnDom(updatingStudentArray[studentIndex])
       }
-      
       calculateGradeAverage(updatingStudentArray)
       //renderGradeAverage(calculateGradeAverage(updatingStudentArray));
 }
@@ -162,11 +153,11 @@ function updateStudentList(updatingStudentArray){
  */
 function calculateGradeAverage(calculateStudentArray){
       var gradeTotal = 0;
-      var numberAvg = null
-      console.log(calculateStudentArray)
+      var numberAvg = null;
+      console.log(calculateStudentArray);
       for(var student = 0; student < calculateStudentArray.length; student++){
-            console.log(calculateStudentArray[student])
-            gradeTotal = parseFloat(calculateStudentArray[student].grade)
+            console.log(calculateStudentArray[student]);
+            gradeTotal = parseFloat(calculateStudentArray[student].grade);
       }
       numberAvg = gradeTotal/calculateStudentArray.length;
       renderGradeAverage(numberAvg)
@@ -178,6 +169,9 @@ function calculateGradeAverage(calculateStudentArray){
  * @returns {undefined} none
  */
 function renderGradeAverage(average){
+      if(studentArray.length === 0){
+            $('.avgGrage').text(0)
+      }
       $('.avgGrade').text(average)
 }
 function handleDeleteButton(){
