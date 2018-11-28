@@ -2,9 +2,14 @@
 * param: http://usejsdoc.org/tags-param.html#examples
 * returns: http://usejsdoc.org/tags-returns.html
 * 
+
 /**
  * Listen for the document to load and initialize the application
  */
+
+var studentArray = [];
+var newStudent = {};
+
 $(document).ready();
 
 /**
@@ -45,6 +50,7 @@ function addClickHandlersToElements(){
        none
  */
 function handleAddClicked(){
+      addStudent(); 
 }
 /***************************************************************************************************
  * handleCancelClicked - Event Handler when user clicks the cancel button, should clear out student form
@@ -61,18 +67,40 @@ function handleCancelClick(){
  * @calls clearAddStudentFormInputs, updateStudentList
  */
 function addStudent(){
+      //var newStudent = {};
+      newStudent.name = $('#studentName').val();
+      newStudent.course = $('#course').val();
+      newStudent.grade = $('#studentGrade').val(); 
+      if(newStudent.name ==='' || newStudent.course ===''|| parseFloat(newStudent.grade<=0) || parseFloat(newStudent.course> 100) || isNaN(newStudent.grade)){
+            alert("invalid input")
+      }
+      studentArray.push(newStudent)
+      console.log(studentArray)
+      updateStudentList(studentArray)
+      clearAddStudentFormInputs();
+      
 }
 /***************************************************************************************************
  * clearAddStudentForm - clears out the form values based on inputIds variable
  */
 function clearAddStudentFormInputs(){
+      console.log('clear add student')
+      $('input').val(' ');
 }
 /***************************************************************************************************
  * renderStudentOnDom - take in a student object, create html elements from the values and then append the elements
  * into the .student_list tbody
  * @param {object} studentObj a single student object with course, name, and grade inside
  */
-function renderStudentOnDom(){
+function renderStudentOnDom(studentObj){
+     var nameTableData = $('<td>').text(studentObj.name);
+     var gradeTableData = $('<td>').text(studentObj.grade);
+     var courseTableData = $('<td>').text(studentObj.course);
+     var newTableRow = $('<tr>').append(nameTableData, gradeTableData, courseTableData);
+     
+     $('tbody').append(newTableRow);
+     //$('tbody>tr').remove();
+     clearAddStudentFormInputs();
 }
 
 /***************************************************************************************************
@@ -81,22 +109,43 @@ function renderStudentOnDom(){
  * @returns {undefined} none
  * @calls renderStudentOnDom, calculateGradeAverage, renderGradeAverage
  */
-function updateStudentList(){
-  
+function updateStudentList(updatingStudentArray){
+      console.log(updatingStudentArray)
+      $('tbody>tr').remove();
+      for(var studentIndex = 0; studentIndex< updatingStudentArray.length; studentIndex++){
+            console.log(updatingStudentArray[studentIndex])
+            renderStudentOnDom(updatingStudentArray[studentIndex])
+      }
+      
+      calculateGradeAverage(updatingStudentArray)
+      //renderGradeAverage(calculateGradeAverage(updatingStudentArray));
 }
 /***************************************************************************************************
  * calculateGradeAverage - loop through the global student array and calculate average grade and return that value
  * @param: {array} students  the array of student objects
  * @returns {number}
  */
-function calculateGradeAverage(){
+function calculateGradeAverage(calculateStudentArray){
+      var gradeTotal = 0;
+      var numberAvg = null
+      console.log(calculateStudentArray)
+      for(var student = 0; student < calculateStudentArray.length; student++){
+            console.log(calculateStudentArray[student])
+            gradeTotal = parseFloat(calculateStudentArray[student].grade)
+      }
+
+
+      numberAvg = gradeTotal/calculateStudentArray.length;
+      renderGradeAverage(numberAvg)
+      return numberAvg;
 }
 /***************************************************************************************************
  * renderGradeAverage - updates the on-page grade average
  * @param: {number} average    the grade average
  * @returns {undefined} none
  */
-function renderGradeAverage(){
+function renderGradeAverage(average){
+      $('.avgGrade').text(average)
 }
 
 
