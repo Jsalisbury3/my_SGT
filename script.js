@@ -59,6 +59,8 @@ function handleAddClicked(){
  * @calls: clearAddStudentFormInputs
  */
 function handleCancelClick(){
+      // Just reset the value inside the inputs 
+      //$('tbody>tr')
 }
 /***************************************************************************************************
  * addStudent - creates a student objects based on input fields in the form and adds the object to global student array
@@ -94,13 +96,42 @@ function clearAddStudentFormInputs(){
  */
 function renderStudentOnDom(studentObj){
      var nameTableData = $('<td>').text(studentObj.name);
+//      var nameTableData = $('<td>',{
+//                   class: 'col-xs-3 col-sm-3',
+//                   text: studentObj.name,
+//                   'text-align': 'center'
+//      });
      var gradeTableData = $('<td>').text(studentObj.grade);
      var courseTableData = $('<td>').text(studentObj.course);
      var newTableRow = $('<tr>').append(nameTableData, gradeTableData, courseTableData);
+
+     var deleteButton = $('<button>',{
+                  class: 'btn btn-danger',
+                  text: 'Delete',
+                  'text-align': 'center',
+                  on: {
+                        click: handleDeleteClicked
+                  }
+     })
      
+     var buttonTd = $('<td>',{class: 'col-xs-3 col-sm-3'}).append(deleteButton)
+     var newTableRow = $('<tr').append(nameTableData, courseTableData, gradeTableData, buttonTd)
      $('tbody').append(newTableRow);
+
+
+     function handleDeleteClicked(){
+      var studentIndex = studentArray.indexOf(studentObj)
+      studentArray.splice(studentIndex, 1)
+      newTableRow.remove()
+     }
+     
+     
+     
+     
      //$('tbody>tr').remove();
-     clearAddStudentFormInputs();
+     //clearAddStudentFormInputs();
+
+
 }
 
 /***************************************************************************************************
@@ -133,8 +164,6 @@ function calculateGradeAverage(calculateStudentArray){
             console.log(calculateStudentArray[student])
             gradeTotal = parseFloat(calculateStudentArray[student].grade)
       }
-
-
       numberAvg = gradeTotal/calculateStudentArray.length;
       renderGradeAverage(numberAvg)
       return numberAvg;
@@ -147,8 +176,10 @@ function calculateGradeAverage(calculateStudentArray){
 function renderGradeAverage(average){
       $('.avgGrade').text(average)
 }
-
-
+function handleDeleteButton(){
+      $(this).closest('tr').remove()
+      console.log(handleDeleteButton)
+}
 
 
 
