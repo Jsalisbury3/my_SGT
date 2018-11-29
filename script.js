@@ -10,7 +10,7 @@
 var studentArray = [];
 
 
-$(document).ready();
+$(document).ready(initializeApp);
 
 /**
  * Define all global variables here.  
@@ -32,8 +32,12 @@ $(document).ready();
 * initializes the application, including adding click handlers and pulling in any data from the server, in later versions
 */
 function initializeApp(){
+      $('.btn-success').click(handleAddClicked);
+      $('.btn-default').click(handleCancelClick);
+      $('.btn-primary').click(loadData)
+      loadData(); 
+      
 }
-
 /***************************************************************************************************
 * addClickHandlerstoElements
 * @params {undefined} 
@@ -59,6 +63,7 @@ function handleAddClicked(){
  * @calls: clearAddStudentFormInputs
  */
 function handleCancelClick(){
+      clearAddStudentFormInputs()
       // Just reset the value inside the inputs 
       //$('tbody>tr')
 }
@@ -129,7 +134,6 @@ function renderStudentOnDom(studentObj){
             calculateGradeAverage(studentArray);
      }
 }
-
 /***************************************************************************************************
  * updateStudentList - centralized function to update the average and call student list update
  * @param students {array} the array of student objects
@@ -137,13 +141,13 @@ function renderStudentOnDom(studentObj){
  * @calls renderStudentOnDom, calculateGradeAverage, renderGradeAverage
  */
 function updateStudentList(updatingStudentArray){
-      console.log(updatingStudentArray)
+      console.log(updatingStudentArray);
       $('tbody>tr').remove();
       for(var studentIndex = 0; studentIndex< updatingStudentArray.length; studentIndex++){
-            console.log(updatingStudentArray[studentIndex])
-            renderStudentOnDom(updatingStudentArray[studentIndex])
+            console.log(updatingStudentArray[studentIndex]);
+            renderStudentOnDom(updatingStudentArray[studentIndex]);
       }
-      calculateGradeAverage(updatingStudentArray)
+      calculateGradeAverage(updatingStudentArray);
       //renderGradeAverage(calculateGradeAverage(updatingStudentArray));
 }
 /***************************************************************************************************
@@ -160,7 +164,7 @@ function calculateGradeAverage(calculateStudentArray){
             gradeTotal = parseFloat(calculateStudentArray[student].grade);
       }
       numberAvg = gradeTotal/calculateStudentArray.length;
-      renderGradeAverage(numberAvg)
+      renderGradeAverage(numberAvg);
       return numberAvg;
 }
 /***************************************************************************************************
@@ -169,15 +173,32 @@ function calculateGradeAverage(calculateStudentArray){
  * @returns {undefined} none
  */
 function renderGradeAverage(average){
-      if(studentArray.length === 0){
-            $('.avgGrage').text(0)
-      }
-      $('.avgGrade').text(average)
+      if(studentArray.length > 0){
+            $('.avgGrade').text(average);
+      }else{ 
+            $('.avgGrade').text(0);
+      }  
 }
 function handleDeleteButton(){
-      $(this).closest('tr').remove()
-      console.log(handleDeleteButton)
+      $(this).closest('tr').remove();
+      console.log(handleDeleteButton);
 }
+function loadData(){
+      console.log(ajaxOptions)
+      var ajaxOptions= {
+            dataType: 'json',
+            url: 'http://s-apis.learningfuze.com/sgt/get',
+            method:'post',
+            data:{
+                  api_key: 'jMkjyNuaR1'
+      }
+}
+
+      $.ajax(ajaxOptions).then(function(response){
+            console.log(response);
+      });
+}
+
 
 
 
