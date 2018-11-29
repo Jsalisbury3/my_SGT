@@ -32,9 +32,9 @@ $(document).ready(initializeApp);
 * initializes the application, including adding click handlers and pulling in any data from the server, in later versions
 */
 function initializeApp(){
-      $('.btn-success').click(handleAddClicked);
+      $('.btn-success').click(handleAddClicked, sendNewStudentData);
       $('.btn-default').click(handleCancelClick);
-      $('.btn-primary').click(loadData)
+      $('.btn-primary').click(loadData,)
       loadData(); 
       
 }
@@ -120,7 +120,9 @@ function renderStudentOnDom(studentObj){
                   text: 'Delete',
                   'text-align': 'center',
                   on: {
-                        click: handleDeleteClicked
+                        //click: handleDeleteClicked, deleteStudentData
+                        //click: deleteStudentData, handleDeleteClicked
+                        
                   }
      })
      var buttonTd = $('<td>',{class: 'col-xs-3 col-sm-3'}).append(deleteButton);
@@ -165,7 +167,7 @@ function calculateGradeAverage(calculateStudentArray){
       }
       numberAvg = gradeTotal/calculateStudentArray.length;
       renderGradeAverage(numberAvg);
-      return numberAvg;
+      //return numberAvg;
 }
 /***************************************************************************************************
  * renderGradeAverage - updates the on-page grade average
@@ -183,6 +185,11 @@ function handleDeleteButton(){
       $(this).closest('tr').remove();
       console.log(handleDeleteButton);
 }
+
+
+
+
+
 function loadData(){
       console.log(ajaxOptions)
       var ajaxOptions= {
@@ -195,10 +202,50 @@ function loadData(){
 }
 
       $.ajax(ajaxOptions).then(function(response){
-            console.log(response);
+            studentArray = response.data
+            updateStudentList(studentArray)
+            //console.log(response);
       });
 }
 
+
+
+
+
+function sendNewStudentData(){
+      var ajaxAdd = {
+            dataType: 'json',
+            url: "http://s-apis.learningfuze.com/sgt/create",
+            method: 'post',
+            data:{
+                  api_key: 'jMkjyNuaR1'
+            }
+      }
+
+      $.ajax(ajaxAdd).then(function(response){
+            console.log('added new student to database')
+
+      });
+
+
+
+}
+
+function deleteStudentData(){
+      var ajaxDelete = {
+            dataType: 'json',
+            url: "http://s-apis.learningfuze.com/sgt/delete",
+            method: 'post',
+            data:{
+                  api_key: 'jMkjyNuaR1'
+            }
+      }
+
+      $.ajax(ajaxDelete).then(function(response){
+            console.log('deleted new student to database')
+      });
+
+}
 
 
 
