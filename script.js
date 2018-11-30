@@ -32,9 +32,9 @@ $(document).ready(initializeApp);
 * initializes the application, including adding click handlers and pulling in any data from the server, in later versions
 */
 function initializeApp(){
-      $('.btn-success').click(handleAddClicked, sendNewStudentData);
+      $('.btn-success').click(handleAddClicked);
       $('.btn-default').click(handleCancelClick);
-      $('.btn-primary').click(loadData,)
+      //$('.btn-primary').click(loadData)
       loadData(); 
       
 }
@@ -74,18 +74,23 @@ function handleCancelClick(){
  * @calls clearAddStudentFormInputs, updateStudentList
  */
 function addStudent(){
-      var newStudent = {};
-      newStudent.name = $('#studentName').val();
-      newStudent.course = $('#course').val();
-      newStudent.grade = $('#studentGrade').val(); 
-      if(newStudent.name ==='' || newStudent.course ===''|| parseFloat(newStudent.grade<=0) || parseFloat(newStudent.course> 100) || isNaN(newStudent.grade)){
+      // var newStudent = {};
+      // newStudent.name = $('#studentName').val();
+      // newStudent.course = $('#course').val();
+      // newStudent.grade = parseInt($('#studentGrade').val()); 
+      var studentName = $('#studentName').val();
+      var studentCourse = $('#course').val();
+      var studentGrade = parseInt($('#studentGrade').val()); 
+      if(studentName ==='' || studentCourse ===''|| parseFloat(studentGrade<=0) || parseFloat(studentCourse> 100) || isNaN(studentGrade)){
             alert("invalid input");
             return;
+      }else{
+            sendNewStudentData(studentName, studentGrade, studentCourse)
       }
-      studentArray.push(newStudent);
-      console.log(studentArray);
-      updateStudentList(studentArray);
-      clearAddStudentFormInputs();
+      // studentArray.push(newStudent);
+      // console.log(studentArray);
+      // updateStudentList(studentArray);
+      // clearAddStudentFormInputs();
 }
 /***************************************************************************************************
  * clearAddStudentForm - clears out the form values based on inputIds variable
@@ -120,12 +125,13 @@ function renderStudentOnDom(studentObj){
                   text: 'Delete',
                   'text-align': 'center',
                   on: {
+                        click: handleDeleteClicked
                         //click: handleDeleteClicked, deleteStudentData
                         //click: deleteStudentData, handleDeleteClicked
                         
                   }
      })
-     var buttonTd = $('<td>',{class: 'col-xs-3 col-sm-3'}).append(deleteButton);
+     var buttonTd = $('<td>',{class: 'col-xs-1 col-sm-3'}).append(deleteButton);
      var newTableRow = $('<tr>').append(nameTableData, courseTableData, gradeTableData, buttonTd);
      $('tbody').append(newTableRow);
      
@@ -134,6 +140,7 @@ function renderStudentOnDom(studentObj){
             studentArray.splice(studentIndex, 1);
             newTableRow.remove();
             calculateGradeAverage(studentArray);
+            deleteStudentData(studentObj.id);
      }
 }
 /***************************************************************************************************
@@ -164,8 +171,10 @@ function calculateGradeAverage(calculateStudentArray){
       for(var student = 0; student < calculateStudentArray.length; student++){
             console.log(calculateStudentArray[student]);
             gradeTotal = parseFloat(calculateStudentArray[student].grade);
+            console.log(gradeTotal)
       }
       numberAvg = gradeTotal/calculateStudentArray.length;
+      numberAvg.toFixed(2)
       renderGradeAverage(numberAvg);
       //return numberAvg;
 }
@@ -184,12 +193,8 @@ function renderGradeAverage(average){
 function handleDeleteButton(){
       $(this).closest('tr').remove();
       console.log(handleDeleteButton);
+
 }
-
-
-
-
-
 function loadData(){
       console.log(ajaxOptions)
       var ajaxOptions= {
@@ -200,49 +205,67 @@ function loadData(){
                   api_key: 'jMkjyNuaR1'
       }
 }
-
       $.ajax(ajaxOptions).then(function(response){
             studentArray = response.data
             updateStudentList(studentArray)
             //console.log(response);
       });
 }
-
-
-
-
-
-function sendNewStudentData(){
+function sendNewStudentData(name, grade, course){
       var ajaxAdd = {
             dataType: 'json',
             url: "http://s-apis.learningfuze.com/sgt/create",
             method: 'post',
             data:{
-                  api_key: 'jMkjyNuaR1'
+                  api_key: 'jMkjyNuaR1',
+                  name: name,
+                  grade: parseInt(grade),
+                  course: course
+
             }
       }
 
       $.ajax(ajaxAdd).then(function(response){
             console.log('added new student to database')
+            console.log(response);
+            var studentObj = {
+                  name: name,
+                  course: course,
+                  grade: grade,
+                  id: response.new_id
+            }
 
+            clearAddStudentFormInputs();
+            studentArray.push(studentObj);
+            updateStudentList(studentObj);
+            console.log(response)
       });
-
-
-
 }
 
-function deleteStudentData(){
+function deleteStudentData(student_id){
       var ajaxDelete = {
             dataType: 'json',
             url: "http://s-apis.learningfuze.com/sgt/delete",
             method: 'post',
             data:{
-                  api_key: 'jMkjyNuaR1'
+                  api_key: 'jMkjyNuaR1',
+                  student_id: parseInt(student_id)
             }
       }
-
       $.ajax(ajaxDelete).then(function(response){
             console.log('deleted new student to database')
+            console.log(response);
+      //       var studentObj = {
+      //             name: name,
+      //             course: course,
+      //             grade: grade,
+      //             id: response.new_id
+      //       }
+
+      //       clearAddStudentFormInputs();
+      //       studentArray.push(studentObj);
+      //       updateStudentList(studentObj);
+      //       console.log(response)
       });
 
 }
