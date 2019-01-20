@@ -170,11 +170,11 @@ function calculateGradeAverage(calculateStudentArray){
       console.log(calculateStudentArray);
       for(var student = 0; student < calculateStudentArray.length; student++){
             console.log(calculateStudentArray[student]);
-            gradeTotal = parseFloat(calculateStudentArray[student].grade);
-            console.log(gradeTotal)
+            gradeTotal += parseFloat(calculateStudentArray[student].grade);
+            console.log(gradeTotal);
       }
       numberAvg = gradeTotal/calculateStudentArray.length;
-      numberAvg.toFixed(2)
+      numberAvg.toFixed(2);
       renderGradeAverage(numberAvg);
       //return numberAvg;
 }
