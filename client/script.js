@@ -1,14 +1,5 @@
-/* information about jsdocs: 
-* param: http://usejsdoc.org/tags-param.html#examples
-* returns: http://usejsdoc.org/tags-returns.html
-* 
-
-/**
- * Listen for the document to load and initialize the application
- */
 
 var studentArray = [];
-
 
 $(document).ready(initializeApp);
 
@@ -141,6 +132,7 @@ function renderStudentOnDom(studentObj){
             studentArray.splice(studentIndex, 1);
             newTableRow.remove();
             calculateGradeAverage(studentArray);
+            console.log(studentObj);
             deleteStudentData(studentObj.id);
      }
 }
@@ -234,6 +226,7 @@ function sendNewStudentData(name, grade, course){
             clearAddStudentFormInputs();
             studentArray.push(studentObj);
             updateStudentList(studentObj);
+            loadData();
             console.log(response)
       });
 }

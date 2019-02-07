@@ -36,8 +36,9 @@ webserver.post('/api/getAllStudents', (request,response)=>{
 webserver.post('/api/deleteStudent', (request,response)=>{
     db.connect(()=>{
             const deleteStudentsQuery = "DELETE * FROM `Students` JOIN `Course` ON Students.ID = Course.Student_ID"
-            const deleteStudentsQuery2 = ""
+            // DELETE FROM STUDENTS WHERE ID = student id (thats passed in)
             db.query(deleteStudentsQuery, (error,data)=>{
+                const deleteStudentsQuery2 = ""
                 if(!error){
                     const output = {
                         'success': true,
@@ -60,17 +61,19 @@ webserver.post('/api/deleteStudent', (request,response)=>{
 
 webserver.post('/api/addStudent', (request,response)=>{
     const name = request.body.name
-    const id = request.body.id
+    console.log(name)
     const grade = request.body.grade
     const course = request.body.course
      db.connect(()=>{
             const addStudentsQuery = "INSERT INTO `Students` SET `Name` = '"+name+"'";
+            console.log("query: ", addStudentsQuery);
             db.query(addStudentsQuery, (error,data)=>{
-                const addStudentQuery2 = 'INSERT INTO Course SET Student_ID=1, Grade = "'+grade+'", Course = "'+course+'"';
+                const newID =  data.insertId 
+                const addStudentQuery2 = 'INSERT INTO `Course` SET `Student_ID` = "'+newID+'", Grade = "'+grade+'", Course = "'+course+'"';
+                // `Student_ID` = "'+newID+'",
                 // `INSERT INTO `Course` SET Grade = '"+grade+"', Course = '"+course+"' `;
                 console.log(addStudentQuery2);
                 if(!error){
-                    
                     db.query(addStudentQuery2,(error,data)=>{
                         if(!error){
                             const output = {
