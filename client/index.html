@@ -2,7 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="./style.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
@@ -12,7 +12,7 @@
 <div class="col-xs-12 col-sm-10 col-sm-offset-1">
     <div class="col-xs-12 page-header media-heading">
         <!-- only show this element when the isnt on mobile -->
-        <h1 class="hidden-xs col-xs-12">Student Grade Table 
+        <h1 class="hidden-xs col-xs-12">Student Grade Table
             <small class = 'col-xs-3 col-xs-offset-9'>Grade Average : <span class="avgGrade"></span></small>
         </h1>
         <!-- only show this element when the user gets to a mobile version -->
@@ -45,6 +45,7 @@
         <button type="button" class="btn btn-success" onclick="">Add</button>
         <button type="button" class="btn btn-default" onclick="">Cancel</button>
         <button type="button" class="btn btn-primary" onclick="">Get Data</button>
+        <a href="./signIn.html"><button type="button" class="btn btn-default" onclick="">Sign In</button></a>
     </div>
     <div class="student-list-container col-xs-12 col-sm-7 col-sm-pull-4 page-header media-heading">
         <table class="student-list">
@@ -53,7 +54,7 @@
                 <th class= 'col-xs-2'>Student Name</th>
                 <th class= 'col-xs-2'>Student Course</th>
                 <th class= 'col-xs-2'>Student Grade</th>
-                <th class= 'col-xs-2'>Operations</th>
+                <th class= 'col-xs-1'>Operations</th>
             </tr>
             </thead>
             <tbody>
@@ -68,4 +69,3 @@
 </div>
 </body>
 </html>
-
