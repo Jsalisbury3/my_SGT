@@ -4,9 +4,11 @@ var studentArray = [];
 $(document).ready(initializeApp);
 
 function initializeApp(){
-    $('.btn-success').click(handleAddClicked);
-    $('.btn-default').click(handleCancelClick);
-    checkAuth();
+      $('#modal').hide()
+      $('.btn-success').click(handleAddClicked);
+      $('.btn-default').click(handleCancelClick);
+      checkAuth();
+   
 }
 
 function addClickHandlersToElements(){
@@ -23,6 +25,10 @@ function checkAuth() {
     }
 }
 
+function signOut(){
+     localStorage.clear();
+     location.replace("http://localhost:7000/signIn.html") 
+}
 function handleAddClicked(){
     addStudent();
 }
@@ -85,8 +91,8 @@ function renderStudentOnDom(studentObj){
         // onclick: "openModal()",
         on: {
             click: handleDeleteClicked
-            //click: handleDeleteClicked, deleteStudentData
-            //click: deleteStudentData, handleDeleteClicked
+            // click: openModal
+           
         }
     })
 
@@ -393,9 +399,12 @@ function checkPasswords() {
     }
 };
 
-// function openModal(){
+function openModal(){
 
-//       $('#modal').show()
+      $('#modal').show()
 
-// }
+}
 
+function hideModal(){
+      $('#modal').hide()
+}

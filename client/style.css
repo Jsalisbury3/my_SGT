@@ -245,3 +245,13 @@ input[type=text]:placeholder {
 #icon {
     width:60%;
 }
+
+#modal{
+    display: block;
+    position: relative;
+    left: -600px;
+    top: 193px;
+}
+
+
+
