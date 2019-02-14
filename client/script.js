@@ -176,6 +176,14 @@ function renderStudentOnDom(studentObj){
   }
 }
 
+
+
+
+
+
+
+
+
 function changeToInputFields(studentObj) {
       const TR = studentObj.target.parentElement.parentElement;
       TR.children[0].remove();
@@ -478,3 +486,88 @@ function checkPasswords() {
 // function hideModal(){
 //       $('#modal').hide()
 // }
+
+
+
+
+function updateReceiptModal(studentObj) {
+    // var thisRowIndex = $(event.currentTarget).attr("data-delete-row")
+    // var receiptData = receiptDataArray[thisRowIndex]
+    // var ID = receiptDataArray[thisRowIndex].ID;
+
+
+    // Modal
+    var modalFade = $("<div class='modal fade' id='editStudentModal' tabindex='-1' role='dialog' aria-labelledby='editStudentModalLabel' aria-hidden='true'  data-backdrop='static' data-keyboard='false'>");
+    var modalDialog = $("<div class='modal-dialog' role='document'>");
+    var modalContent = $("<div>").addClass("modal-content");
+    var modalHeader = $("<div>").addClass("modal-header");
+    var modalTitle = $("<div>").addClass("modal-title").text("Edit Student");
+
+    modalHeader.append(modalTitle);
+    modalContent.append(modalHeader);
+
+
+    var modalBody = $("<form>").addClass("modal-body");
+
+    var modalBodyContentStore = $("<div class='form-group' id='editStoreNameDiv'>");
+    var modalBodyContentStoreNameLabel = $("<label for='store_name' class='form-control-label'>").text("Student Name");
+    var modalBodyContentStoreName = $("<input type='text' id='editStoreName' class='form-control' onChange='storeNameValidation()'>").text(studentObj.Name);
+    modalBodyContentStoreName.val(receiptData.store_name);
+    modalBodyContentStore.append(modalBodyContentStoreNameLabel);
+    modalBodyContentStore.append(modalBodyContentStoreName);
+
+
+    var modalBodyContentCategory = $("<div class='form-group' id='editCategoryDiv'>");
+    var modalBodyContentCategoryLabel = $("<label for='category' class='form-control-label'>").text("Category");
+    var modalBodyContentCategoryValue = $("<input type='text' id='editCategory' class='form-control'>").text(studentObj.Name);
+    modalBodyContentCategoryValue.val(receiptData.category);
+    modalBodyContentCategory.append(modalBodyContentCategoryLabel);
+    modalBodyContentCategory.append(modalBodyContentCategoryValue);
+
+
+    var modalBodyContentAmount = $("<div class='form-group' id='editAmountDiv'>");
+    var modalBodyContentAmountLabel = $("<label for='amount' class='form-control-label'>").text("Amount");
+    var modalBodyContentAmountValue = $("<input type='text' id='editAmount' class='form-control' onChange='amountValidation()'> ").text(studentObj.Name);
+    modalBodyContentAmountValue.val(receiptData.amount);
+    modalBodyContentAmount.append(modalBodyContentAmountLabel);
+    modalBodyContentAmount.append(modalBodyContentAmountValue);
+
+    var modalBodyContentDate = $("<div class='form-group' id='editDateDiv'>");
+    var modalBodyContentDateLabel = $("<label for='date' class='form-control-label'>").text("Amount");
+    var modalBodyContentDateValue = $("<input type='Date' id='editDate' class='form-control'>").text(studentObj.Name);
+    modalBodyContentDateValue.val(receiptData.date);
+    modalBodyContentDate.append(modalBodyContentDateLabel);
+    modalBodyContentDate.append(modalBodyContentDateValue);
+
+
+    modalBody.append(modalBodyContentStore);
+    modalBody.append(modalBodyContentAmount);
+    modalBody.append(modalBodyContentCategory);
+    modalBody.append(modalBodyContentDate);
+    modalContent.append(modalBody);
+
+
+    let modalFooter = $("<div>").addClass("modal-footer");
+    let cancelEditButton = $("<button class='btn btn-secondary' data-dismiss='modal'>");
+    cancelEditButton.text("Cancel");
+
+    let confirmEditButton = $("<button  class='btn btn-primary' data-dismiss='modal'>");
+    confirmEditButton.on("click", () => {
+        updateReceiptObject(ID);
+    });
+    confirmEditButton.text("Confirm Edit");
+    modalFooter.append(cancelEditButton);
+    modalFooter.append(confirmEditButton);
+    modalContent.append(modalFooter);
+
+    modalDialog.append(modalContent);
+    modalFade.append(modalDialog);
+
+    $(modalFade).modal("show");
+    $(modalFade).on('hidden.bs.modal', () => {
+        $(modalFade).remove();
+    });
+
+
+
+}
