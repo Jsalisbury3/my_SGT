@@ -122,6 +122,7 @@ function renderStudentOnDom(studentObj){
             studentArray.splice(studentIndex, 1);
             newTableRow.remove();
             calculateGradeAverage(studentArray);
+            console.log(studentArray)
             deleteStudentData(studentObj.ID);
       }
 
@@ -205,6 +206,7 @@ function changeToInputFields(studentObj) {
       const course = TR.children[1].childNodes[0].value;
       const grade = TR.children[2].childNodes[0].value;
       const id = TR.children[4].childNodes[0].attributes.rowNum.value;
+      calculateGradeAverage(studentArray);
       editStudentList(name, course, grade, id);
   }
 
@@ -312,7 +314,7 @@ function calculateGradeAverage(calculateStudentArray){
     console.log(calculateStudentArray);
     for(var student = 0; student < calculateStudentArray.length; student++){
         console.log(calculateStudentArray[student]);
-        gradeTotal += parseFloat(calculateStudentArray[student].grade);
+        gradeTotal += parseFloat(calculateStudentArray[student].Grade);
         console.log(gradeTotal);
     }
 
