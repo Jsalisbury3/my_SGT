@@ -2,9 +2,14 @@
     background-color: #56baed;
 } */
 
+.glyphicon-trash{
+    margin-right:10px
+}
+
 body {
     font-family: "Poppins", sans-serif;
     height: 100vh;
+    font-size:11px;
 }
 
 .sign-in-logo {
