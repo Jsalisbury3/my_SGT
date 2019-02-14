@@ -1,10 +1,11 @@
 
 var studentArray = [];
+// var addRow = $("<tr>").addClass('tableRow');
 
 $(document).ready(initializeApp);
 
 function initializeApp(){
-      $('#modal').hide()
+      // $('#modal').hide()
       $('.btn-success').click(handleAddClicked);
       $('.btn-default').click(handleCancelClick);
       checkAuth();
@@ -61,7 +62,9 @@ function addStudent(){
 
 function clearAddStudentFormInputs(){
     console.log('clear add student');
-    $('input').val(' ');
+    $('input[name=studentName]').val('').blur();
+    $('input[name=course]').val('').blur();
+    $('input[name=studentGrade]').val('').blur();
 }
 
 function renderStudentOnDom(studentObj){
@@ -85,19 +88,20 @@ function renderStudentOnDom(studentObj){
     })
 
     var deleteButton = $('<button>',{
-        class: 'btn btn-danger',
-        text: 'Delete',
+        class: 'btn btn-danger btn-sm glyphicon glyphicon-trash',
+      //   text: 'Delete',
         'text-align': 'center',
-        // onclick: "openModal()",
         on: {
-            click: handleDeleteClicked
+            // click: handleDeleteClicked
+            click: deleteModal
             // click: openModal
            
         }
     })
 
     var editButton = $('<button>',{
-        class: 'btn btn-warning edit',
+        class: 'btn btn-warning btn-sm glyphicon glyphicon-edit edit',
+        id:'edits',
         text: 'Edit',
         'text-align': 'center',
         rowNum: studentObj.ID,
@@ -106,54 +110,138 @@ function renderStudentOnDom(studentObj){
         }
     })
 
+ 
+
+      function handleEditClicked(studentObj){
+            changeToInputFields(studentObj);
+      }
+
+
+      function handleDeleteClicked(){
+            var studentIndex = studentArray.indexOf(studentObj);
+            studentArray.splice(studentIndex, 1);
+            newTableRow.remove();
+            calculateGradeAverage(studentArray);
+            deleteStudentData(studentObj.ID);
+      }
+
+
     var buttonTd = $('<td>',{class: 'col-xs-1 col-sm-3'}).append(deleteButton);
     var buttonTd2 = $('<td>',{class: 'col-xs-1 col-sm-3'}).append(editButton);
     var newTableRow = $('<tr>').append(nameTableData, courseTableData, gradeTableData, buttonTd, buttonTd2);
     $('tbody').append(newTableRow);
 
-    function handleDeleteClicked(){
-        var studentIndex = studentArray.indexOf(studentObj);
-        studentArray.splice(studentIndex, 1);
-        newTableRow.remove();
-        calculateGradeAverage(studentArray);
-        deleteStudentData(studentObj.ID);
-    }
 
-    function handleEditClicked(studentObj){
-        changeToInputFields(studentObj);
-    }
+    function deleteModal() {
+
+      // var thisRowIndex = $(event.currentTarget).attr("data-delete-row")
+      // var ID = receiptDataArray[thisRowIndex].ID;
+  
+  
+      // Modal
+      var modalFade = $("<div class='modal fade' id='editStudentModal' tabindex='-1' role='dialog' aria-labelledby='editStudentModalLabel' aria-hidden='true' data-backdrop='static' data-keyboard='false'>");
+      var modalDialog = $("<div class='modal-dialog' role='document'>");
+      var modalContent = $("<div>").addClass("modal-content");
+      var modalHeader = $("<div>").addClass("modal-header");
+      var modalTitle = $("<div>").addClass("modal-title").text("Are you sure you want to remove this receipt?");
+  
+      modalHeader.append(modalTitle);
+      modalContent.append(modalHeader);
+  
+  
+      var modalFooter = $("<div>").addClass("modal-footer");
+      var cancelDeleteButton = $("<button class='btn btn-secondary' data-dismiss='modal'>");
+      cancelDeleteButton.text("Cancel");
+      var confirmDeleteButton = $("<button class='btn btn-danger' data-dismiss='modal'>");
+  
+      confirmDeleteButton.on("click", () => {
+      //     deleteData(ID);
+      //     deleteReceiptRow(thisRowIndex)
+            handleDeleteClicked();
+  
+      });
+      confirmDeleteButton.text("DELETE");
+      modalFooter.append(cancelDeleteButton);
+      modalFooter.append(confirmDeleteButton);
+      modalContent.append(modalFooter);
+  
+      modalDialog.append(modalContent);
+      modalFade.append(modalDialog);
+  
+      $(modalFade).modal("show");
+      $(modalFade).on('hidden.bs.modal', () => {
+          $(modalFade).remove();
+      });
+  }
 }
 
-function CalleditStudentList(studentObj) {
-    const TR = studentObj.target.parentElement.parentElement;
-    const name = TR.children[0].childNodes[0].value;
-    const course = TR.children[1].childNodes[0].value;
-    const grade = TR.children[2].childNodes[0].value;
-    const id = TR.children[4].childNodes[0].attributes.rowNum.value;
-    editStudentList(name, course, grade, id);
-}
+function changeToInputFields(studentObj) {
+      const TR = studentObj.target.parentElement.parentElement;
+      TR.children[0].remove();
+      TR.children[1].remove();
+      TR.children[0].remove();
+      let gradeTD = TR.children[0] = document.createElement("td");
+      let courseTD = TR.children[0] = document.createElement("td");
+      let nameTD = TR.children[0] = document.createElement("td");
+      let inputTag1 = document.createElement("input");
+      let inputTag2 = document.createElement("input");
+      let inputTag3 = document.createElement("input");
+      inputTag1.classList.add("col-xs-12");
+      inputTag2.classList.add("col-xs-12");
+      inputTag3.classList.add("col-xs-12");
+      gradeTD.append(inputTag1);
+      courseTD.append(inputTag2);
+      nameTD.append(inputTag3);
+      TR.prepend(gradeTD);
+      TR.prepend(courseTD);
+      TR.prepend(nameTD);
+      $(".edit").off("click");
+      TR.children[4].childNodes[0].addEventListener("click", CalleditStudentList);
+  }
 
+  function CalleditStudentList(studentObj) {
+      const TR = studentObj.target.parentElement.parentElement;
+      const name = TR.children[0].childNodes[0].value;
+      const course = TR.children[1].childNodes[0].value;
+      const grade = TR.children[2].childNodes[0].value;
+      const id = TR.children[4].childNodes[0].attributes.rowNum.value;
+      editStudentList(name, course, grade, id);
+  }
 
 function editStudentList(name, course, grade, id){
-    $.ajax({
-        dataType: 'json',
-        method: "POST",
-        url: "/api/UpdateStudent",
-        data: {
-            name,
-            course,
-            grade,
-            id
-        }
-    }).then((reponse) => {
-        if(reponse.success) {
-            loadData();
-        } else {
-            //handle failed query here
-        }
+      $.ajax({
+          dataType: 'json',
+          method: "POST",
+          url: "/api/UpdateStudent",
+          data: {
+              name,
+              course,
+              grade,
+              id
+          }
+      }).then((reponse) => {
+          if(reponse.success) {
+              loadData();
+          } else {
+              //handle failed query here
+          }
+  
+      })
+  }
 
-    })
+
+
+
+function handleDeleteClicked(){
+      var studentIndex = studentArray.indexOf(studentObj);
+      studentArray.splice(studentIndex, 1);
+      newTableRow.remove();
+      calculateGradeAverage(studentArray);
+      deleteStudentData(studentObj.ID);
 }
+
+
+
 
 function validation(){
     const tests = [
@@ -206,30 +294,6 @@ function logUserIn() {
             $('.errorMessage').css("display", "block").css("color", "red").text(response.message);
         }
     })
-}
-
-function changeToInputFields(studentObj) {
-    const TR = studentObj.target.parentElement.parentElement;
-    TR.children[0].remove();
-    TR.children[1].remove();
-    TR.children[0].remove();
-    let gradeTD = TR.children[0] = document.createElement("td");
-    let courseTD = TR.children[0] = document.createElement("td");
-    let nameTD = TR.children[0] = document.createElement("td");
-    let inputTag1 = document.createElement("input");
-    let inputTag2 = document.createElement("input");
-    let inputTag3 = document.createElement("input");
-    inputTag1.classList.add("col-xs-12");
-    inputTag2.classList.add("col-xs-12");
-    inputTag3.classList.add("col-xs-12");
-    gradeTD.append(inputTag1);
-    courseTD.append(inputTag2);
-    nameTD.append(inputTag3);
-    TR.prepend(gradeTD);
-    TR.prepend(courseTD);
-    TR.prepend(nameTD);
-    $(".edit").off("click");
-    TR.children[4].childNodes[0].addEventListener("click", CalleditStudentList);
 }
 
 function updateStudentList(updatingStudentArray){
@@ -399,12 +463,16 @@ function checkPasswords() {
     }
 };
 
-function openModal(){
 
-      $('#modal').show()
 
-}
 
-function hideModal(){
-      $('#modal').hide()
-}
+
+// function openModal(){
+
+//       $('#modal').show()
+
+// }
+
+// function hideModal(){
+//       $('#modal').hide()
+// }
