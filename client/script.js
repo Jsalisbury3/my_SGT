@@ -7,7 +7,7 @@ $(document).ready(initializeApp);
 function initializeApp(){
       // $('#modal').hide()
       $('.btn-success').click(handleAddClicked);
-      $('.btn-default').click(handleCancelClick);
+      $('.btn-primary').click(handleCancelClick);
       checkAuth();
    
 }
@@ -127,9 +127,9 @@ function renderStudentOnDom(studentObj){
       }
 
 
-    var buttonTd = $('<td>',{class: 'col-xs-1 col-sm-3'}).append(deleteButton);
-    var buttonTd2 = $('<td>',{class: 'col-xs-1 col-sm-3'}).append(editButton);
-    var newTableRow = $('<tr>').append(nameTableData, courseTableData, gradeTableData, buttonTd, buttonTd2);
+    var buttonTd = $('<td>').append(deleteButton, editButton);
+    // var buttonTd2 = $('<td>',{class: 'col-xs-1 col-sm-3'}).append(editButton);
+    var newTableRow = $('<tr>').append(nameTableData, courseTableData, gradeTableData, buttonTd);
     $('tbody').append(newTableRow);
 
 
@@ -201,14 +201,14 @@ function renderStudentOnDom(studentObj){
 
     var modalBodyContentCategory = $("<div class='form-group'>");
     var modalBodyContentCategoryLabel = $("<label for='category' class='form-control-label'>").text("Course");
-    var modalBodyContentCategoryValue = $("<input type='text' class='form-control'>").text('hello');
+    var modalBodyContentCategoryValue = $("<input type='text' class='form-control'>").text("write something");
     modalBodyContentCategoryValue.val('');
     modalBodyContentCategory.append(modalBodyContentCategoryLabel);
     modalBodyContentCategory.append(modalBodyContentCategoryValue);
 
     var modalBodyContentAmount = $("<div class='form-group'>");
     var modalBodyContentAmountLabel = $("<label for='amount' class='form-control-label'>").text("Grade");
-    var modalBodyContentAmountValue = $("<input type='text' class='form-control'>").text("hrllo");
+    var modalBodyContentAmountValue = $("<input type='text' class='form-control'>").text('studentObj.Name');
     modalBodyContentAmountValue.val('');
     modalBodyContentAmount.append(modalBodyContentAmountLabel);
     modalBodyContentAmount.append(modalBodyContentAmountValue);
