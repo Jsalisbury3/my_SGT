@@ -49,7 +49,8 @@ function addStudent(){
     var studentCourse = $('#course').val();
     var studentGrade = parseInt($('#studentGrade').val());
     if(studentName ==='' || studentCourse ===''|| parseFloat(studentGrade<=0) || parseFloat(studentCourse> 100) || isNaN(studentGrade)){
-        alert("invalid input");
+        // alert("invalid input");
+        invalidModal()
         return;
     }else{
         sendNewStudentData(studentName, studentGrade, studentCourse)
@@ -66,6 +67,55 @@ function clearAddStudentFormInputs(){
     $('input[name=course]').val('').blur();
     $('input[name=studentGrade]').val('').blur();
 }
+
+
+function invalidModal() {
+
+    // var thisRowIndex = $(event.currentTarget).attr("data-delete-row")
+    // var ID = receiptDataArray[thisRowIndex].ID;
+
+
+    // Modal
+    var modalFade = $("<div class='modal fade' id='editStudentModal' tabindex='-1' role='dialog' aria-labelledby='editStudentModalLabel' aria-hidden='true' data-backdrop='static' data-keyboard='false'>");
+    var modalDialog = $("<div class='modal-dialog' role='document'>");
+    var modalContent = $("<div>").addClass("modal-content");
+    var modalHeader = $("<div>").addClass("modal-header");
+    var modalTitle = $("<div>").addClass("modal-title").text("Invalid Input");
+
+    modalHeader.append(modalTitle);
+    modalContent.append(modalHeader);
+
+
+    var modalFooter = $("<div>").addClass("modal-footer");
+    var cancelDeleteButton = $("<button class='btn btn-secondary' data-dismiss='modal'>");
+    cancelDeleteButton.text("Confirm");
+    // var confirmDeleteButton = $("<button class='btn btn-danger' data-dismiss='modal'>");
+
+    // confirmDeleteButton.on("click", () => {
+    //     deleteData(ID);
+    //     deleteReceiptRow(thisRowIndex)
+    //       handleDeleteClicked();
+
+    // });
+    // confirmDeleteButton.text("DELETE");
+    modalFooter.append(cancelDeleteButton);
+    // modalFooter.append(confirmDeleteButton);
+    modalContent.append(modalFooter);
+
+    modalDialog.append(modalContent);
+    modalFade.append(modalDialog);
+
+    $(modalFade).modal("show");
+    $(modalFade).on('hidden.bs.modal', () => {
+        $(modalFade).remove();
+    });
+}
+
+
+
+
+
+
 
 function renderStudentOnDom(studentObj){
     console.log(studentObj)
@@ -106,7 +156,8 @@ function renderStudentOnDom(studentObj){
         rowNum: studentObj.ID,
         on: {
             // click: handleEditClicked
-            click: editModal
+            click: handleeditModal
+            // click: editModal
         }
     })
 
@@ -115,7 +166,9 @@ function renderStudentOnDom(studentObj){
       function handleEditClicked(studentObj){
             changeToInputFields(studentObj);
       }
-
+      function handleeditModal(studentObj){
+          editModal(studentObj)
+      }
 
       function handleDeleteClicked(){
             var studentIndex = studentArray.indexOf(studentObj);
@@ -127,9 +180,9 @@ function renderStudentOnDom(studentObj){
       }
 
 
-    var buttonTd = $('<td>').append(deleteButton);
-    var buttonTd2 = $('<td>').append(editButton);
-    var newTableRow = $('<tr>').append(nameTableData, courseTableData, gradeTableData, buttonTd, buttonTd2);
+    var buttonTd = $('<td>').append(deleteButton, editButton);
+    // var buttonTd2 = $('<td>').append(editButton);
+    var newTableRow = $('<tr>').append(nameTableData, courseTableData, gradeTableData, buttonTd);
     $('tbody').append(newTableRow);
 
 
@@ -193,23 +246,25 @@ function renderStudentOnDom(studentObj){
     var modalBody = $("<form>").addClass("modal-body");
     var modalBodyContentStore = $("<div class='form-group'>");
     var modalBodyContentStoreNameLabel = $("<label for='store_name' class='form-control-label'>").text("Student Name");
-    console.log(studentObj.Name)
-    var modalBodyContentStoreName = $("<input type='text' class='form-control'>").text('hello');
-    modalBodyContentStoreName.val('');
+    console.log(studentObj.name)
+    console.log(studentObj.name)
+    console.log(studentArray)
+    var modalBodyContentStoreName = $("<input type='text' class='form-control'>");
+    modalBodyContentStoreName.val(studentObj.Name);
     modalBodyContentStore.append(modalBodyContentStoreNameLabel);
     modalBodyContentStore.append(modalBodyContentStoreName);
 
     var modalBodyContentCategory = $("<div class='form-group'>");
     var modalBodyContentCategoryLabel = $("<label for='category' class='form-control-label'>").text("Course");
-    var modalBodyContentCategoryValue = $("<input type='text' class='form-control'>").text("write something");
-    modalBodyContentCategoryValue.val('');
+    var modalBodyContentCategoryValue = $("<input type='text' id='editCategory' class='form-control'>");
+    modalBodyContentCategoryValue.val(studentObj.Course);
     modalBodyContentCategory.append(modalBodyContentCategoryLabel);
     modalBodyContentCategory.append(modalBodyContentCategoryValue);
 
     var modalBodyContentAmount = $("<div class='form-group'>");
     var modalBodyContentAmountLabel = $("<label for='amount' class='form-control-label'>").text("Grade");
     var modalBodyContentAmountValue = $("<input type='text' class='form-control'>")
-    modalBodyContentAmountValue.val('');
+    modalBodyContentAmountValue.val(studentObj.Grade);
     modalBodyContentAmount.append(modalBodyContentAmountLabel);
     modalBodyContentAmount.append(modalBodyContentAmountValue);
 
@@ -223,7 +278,14 @@ function renderStudentOnDom(studentObj){
     cancelEditButton.text("Cancel");
     let confirmEditButton = $("<button  class='btn btn-primary' data-dismiss='modal'>");
     confirmEditButton.on("click", () => {
-          // handleEditClicked(studentObj);
+        //   handleEditClicked(studentObj);
+        //   if(studentName ==='' || studentCourse ===''|| parseFloat(studentGrade<=0) || parseFloat(studentCourse> 100) || isNaN(studentGrade)){
+        //     // alert("invalid input");
+        //     invalidModal()
+        //     return;
+        // }else{
+        //         sendNewStudentData(studentName, studentGrade, studentCourse)
+        // }
           CalleditStudentList(studentObj);
     });
     confirmEditButton.text("Confirm Edit");
@@ -240,19 +302,23 @@ function renderStudentOnDom(studentObj){
     });
 
     function CalleditStudentList(studentObj) {
+        console.log(studentObj)
         const TR = studentObj.target.parentElement.parentElement;
+        console.log(studentObj)
         // const name = TR.children[0].childNodes[0].value;
         const name = modalBodyContentStoreName.val()
         // const course = TR.children[1].childNodes[0].value;
         const course =  modalBodyContentCategoryValue.val()
         // const grade = TR.children[2].childNodes[0].value;
         const grade = modalBodyContentAmountValue.val();
-        const id = TR.children[4].childNodes[0].attributes.rowNum.value;
+        // const id = TR.children[4].childNodes[0].attributes.rowNum.value; 
+        const id = TR.children[3].childNodes[1].attributes.rownum.value;
+        
         calculateGradeAverage(studentArray);
         editStudentList(name, course, grade, id);
     }
-
-
+    
+    
     function editStudentList(name, course, grade, id){
         $.ajax({
             dataType: 'json',
@@ -274,10 +340,6 @@ function renderStudentOnDom(studentObj){
         })
     }
 
-}
-
-
-
 
 
 
@@ -286,6 +348,13 @@ function renderStudentOnDom(studentObj){
 
 
 }
+
+}
+
+
+
+
+
 
 
 
