@@ -2,6 +2,9 @@
     background-color: #56baed;
 } */
 
+.modal-grade-regex{
+    color:red;
+}
 .glyphicon-trash{
     margin-right:10px;
 }
