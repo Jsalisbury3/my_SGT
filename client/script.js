@@ -127,9 +127,9 @@ function renderStudentOnDom(studentObj){
       }
 
 
-    var buttonTd = $('<td>').append(deleteButton, editButton);
-    // var buttonTd2 = $('<td>',{class: 'col-xs-1 col-sm-3'}).append(editButton);
-    var newTableRow = $('<tr>').append(nameTableData, courseTableData, gradeTableData, buttonTd);
+    var buttonTd = $('<td>').append(deleteButton);
+    var buttonTd2 = $('<td>').append(editButton);
+    var newTableRow = $('<tr>').append(nameTableData, courseTableData, gradeTableData, buttonTd, buttonTd2);
     $('tbody').append(newTableRow);
 
 
@@ -208,7 +208,7 @@ function renderStudentOnDom(studentObj){
 
     var modalBodyContentAmount = $("<div class='form-group'>");
     var modalBodyContentAmountLabel = $("<label for='amount' class='form-control-label'>").text("Grade");
-    var modalBodyContentAmountValue = $("<input type='text' class='form-control'>").text('studentObj.Name');
+    var modalBodyContentAmountValue = $("<input type='text' class='form-control'>")
     modalBodyContentAmountValue.val('');
     modalBodyContentAmount.append(modalBodyContentAmountLabel);
     modalBodyContentAmount.append(modalBodyContentAmountValue);
