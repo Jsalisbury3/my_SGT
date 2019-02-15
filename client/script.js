@@ -69,7 +69,7 @@ function clearAddStudentFormInputs(){
 }
 
 
-function invalidModal() {a
+function invalidModal() {
 
     // var thisRowIndex = $(event.currentTarget).attr("data-delete-row")
     // var ID = receiptDataArray[thisRowIndex].ID;
@@ -286,7 +286,7 @@ function renderStudentOnDom(studentObj){
         // }else{
         //         sendNewStudentData(studentName, studentGrade, studentCourse)
         // }
-          CalleditStudentList();
+          CalleditStudentList(studentObj);
     });
     confirmEditButton.text("Confirm Edit");
     modalFooter.append(cancelEditButton);
@@ -301,8 +301,24 @@ function renderStudentOnDom(studentObj){
         $(modalFade).remove();
     });
 
-
-
+    function CalleditStudentList(studentObj) {
+        console.log(studentObj)
+        const TR = studentObj.target.parentElement.parentElement;
+        console.log(studentObj)
+        // const name = TR.children[0].childNodes[0].value;
+        const name = modalBodyContentStoreName.val()
+        // const course = TR.children[1].childNodes[0].value;
+        const course =  modalBodyContentCategoryValue.val()
+        // const grade = TR.children[2].childNodes[0].value;
+        const grade = modalBodyContentAmountValue.val();
+        // const id = TR.children[4].childNodes[0].attributes.rowNum.value; 
+        const id = TR.children[3].childNodes[1].attributes.rownum.value;
+        
+        calculateGradeAverage(studentArray);
+        editStudentList(name, course, grade, id);
+    }
+    
+    
     function editStudentList(name, course, grade, id){
         $.ajax({
             dataType: 'json',
@@ -324,29 +340,14 @@ function renderStudentOnDom(studentObj){
         })
     }
 
-    function CalleditStudentList(studentObj) {
-        const TR = studentObj.target.parentElement.parentElement;
-        console.log(studentObj)
-        // const name = TR.children[0].childNodes[0].value;
-        const name = modalBodyContentStoreName.val()
-        // const course = TR.children[1].childNodes[0].value;
-        const course =  modalBodyContentCategoryValue.val()
-        // const grade = TR.children[2].childNodes[0].value;
-        const grade = modalBodyContentAmountValue.val();
-        // const id = TR.children[4].childNodes[0].attributes.rowNum.value; 
-        const id = TR.children[3].childNodes[1].attributes.rownum.value;
-        
-        calculateGradeAverage(studentArray);
-        editStudentList(name, course, grade, id);
-    }
+
+
 
 
 
 
 
 }
-
-
 
 }
 
