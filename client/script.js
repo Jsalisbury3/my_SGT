@@ -228,11 +228,12 @@ function renderStudentOnDom(studentObj){
       });
   }
 
-  function editModal(studentObj) {
+  function editModal() {
     // var thisRowIndex = $(event.currentTarget).attr("data-delete-row")
     // var receiptData = receiptDataArray[thisRowIndex]
     // var ID = receiptDataArray[thisRowIndex].ID;
     // Modal
+    $('.modal-grade-regex').hide()
     var modalFade = $("<div class='modal fade' id='editStudentModal' tabindex='-1' role='dialog' aria-labelledby='editStudentModalLabel' aria-hidden='true'  data-backdrop='static' data-keyboard='false'>");
     var modalDialog = $("<div class='modal-dialog' role='document'>");
     var modalContent = $("<div>").addClass("modal-content");
@@ -265,8 +266,11 @@ function renderStudentOnDom(studentObj){
     var modalBodyContentAmountLabel = $("<label for='amount' class='form-control-label'>").text("Grade");
     var modalBodyContentAmountValue = $("<input type='text' class='form-control'>")
     modalBodyContentAmountValue.val(studentObj.Grade);
+    var modalGradeRexex = $("p").text("Invalid Grade").addClass('modal-grade-regex')
     modalBodyContentAmount.append(modalBodyContentAmountLabel);
     modalBodyContentAmount.append(modalBodyContentAmountValue);
+    modalBodyContentAmount.append(modalGradeRexex);
+
 
     modalBody.append(modalBodyContentStore);
     modalBody.append(modalBodyContentAmount);
@@ -278,15 +282,18 @@ function renderStudentOnDom(studentObj){
     cancelEditButton.text("Cancel");
     let confirmEditButton = $("<button  class='btn btn-primary' data-dismiss='modal'>");
     confirmEditButton.on("click", () => {
-        //   handleEditClicked(studentObj);
-        //   if(studentName ==='' || studentCourse ===''|| parseFloat(studentGrade<=0) || parseFloat(studentCourse> 100) || isNaN(studentGrade)){
-        //     // alert("invalid input");
-        //     invalidModal()
-        //     return;
-        // }else{
-        //         sendNewStudentData(studentName, studentGrade, studentCourse)
-        // }
-          CalleditStudentList(studentObj);
+            /// validation for edit modal
+          if(modalBodyContentStoreName.val() ==='' ||  modalBodyContentCategoryValue.val() ===''|| parseFloat( modalBodyContentAmountValue.val()<=0) || parseFloat(modalBodyContentCategoryValue.val()> 100) || isNaN( modalBodyContentAmountValue.val())){
+            console.log('yayyyyayayayayayayayayayayay')
+            $('.modal-grade-regex').show()
+            alert('Invalid Grade Input')
+            return;
+        }else{
+                CalleditStudentList(studentObj);
+        }
+
+        //   CalleditStudentList(studentObj);
+
     });
     confirmEditButton.text("Confirm Edit");
     modalFooter.append(cancelEditButton);
@@ -303,16 +310,17 @@ function renderStudentOnDom(studentObj){
 
     function CalleditStudentList(studentObj) {
         console.log(studentObj)
-        const TR = studentObj.target.parentElement.parentElement;
-        console.log(studentObj)
+        // const TR = studentObj.target.parentElement.parentElement;
         // const name = TR.children[0].childNodes[0].value;
         const name = modalBodyContentStoreName.val()
         // const course = TR.children[1].childNodes[0].value;
         const course =  modalBodyContentCategoryValue.val()
         // const grade = TR.children[2].childNodes[0].value;
         const grade = modalBodyContentAmountValue.val();
-        // const id = TR.children[4].childNodes[0].attributes.rowNum.value; 
-        const id = TR.children[3].childNodes[1].attributes.rownum.value;
+        // const id = TR.children[4].childNodes[0].attributes.rowNum.value;
+         
+        // const id = TR.children[3].childNodes[1].attributes.rownum.value;
+        const id = studentObj.ID
         
         calculateGradeAverage(studentArray);
         editStudentList(name, course, grade, id);
@@ -641,67 +649,67 @@ function checkPasswords() {
 
 
 
-function editModal(studentObj) {
-    // var thisRowIndex = $(event.currentTarget).attr("data-delete-row")
-    // var receiptData = receiptDataArray[thisRowIndex]
-    // var ID = receiptDataArray[thisRowIndex].ID;
-    // Modal
-    var modalFade = $("<div class='modal fade' id='editStudentModal' tabindex='-1' role='dialog' aria-labelledby='editStudentModalLabel' aria-hidden='true'  data-backdrop='static' data-keyboard='false'>");
-    var modalDialog = $("<div class='modal-dialog' role='document'>");
-    var modalContent = $("<div>").addClass("modal-content");
-    var modalHeader = $("<div>").addClass("modal-header");
-    var modalTitle = $("<div>").addClass("modal-title").text("Edit Student");
+// function editModal(studentObj) {
+//     // var thisRowIndex = $(event.currentTarget).attr("data-delete-row")
+//     // var receiptData = receiptDataArray[thisRowIndex]
+//     // var ID = receiptDataArray[thisRowIndex].ID;
+//     // Modal
+//     var modalFade = $("<div class='modal fade' id='editStudentModal' tabindex='-1' role='dialog' aria-labelledby='editStudentModalLabel' aria-hidden='true'  data-backdrop='static' data-keyboard='false'>");
+//     var modalDialog = $("<div class='modal-dialog' role='document'>");
+//     var modalContent = $("<div>").addClass("modal-content");
+//     var modalHeader = $("<div>").addClass("modal-header");
+//     var modalTitle = $("<div>").addClass("modal-title").text("Edit Student");
 
-    modalHeader.append(modalTitle);
-    modalContent.append(modalHeader);
+//     modalHeader.append(modalTitle);
+//     modalContent.append(modalHeader);
 
 
-    var modalBody = $("<form>").addClass("modal-body");
-    var modalBodyContentStore = $("<div class='form-group'>");
-    var modalBodyContentStoreNameLabel = $("<label for='store_name' class='form-control-label'>").text("Student Name");
-    console.log(studentObj.Name)
-    var modalBodyContentStoreName = $("<input type='text' class='form-control'>").text(studentObj.Name);
-    modalBodyContentStoreName.val(studentObj.name);
-    modalBodyContentStore.append(modalBodyContentStoreNameLabel);
-    modalBodyContentStore.append(modalBodyContentStoreName);
+//     var modalBody = $("<form>").addClass("modal-body");
+//     var modalBodyContentStore = $("<div class='form-group'>");
+//     var modalBodyContentStoreNameLabel = $("<label for='store_name' class='form-control-label'>").text("Student Name");
+//     console.log(studentObj.Name)
+//     var modalBodyContentStoreName = $("<input type='text' class='form-control'>").text(studentObj.Name);
+//     modalBodyContentStoreName.val(studentObj.name);
+//     modalBodyContentStore.append(modalBodyContentStoreNameLabel);
+//     modalBodyContentStore.append(modalBodyContentStoreName);
 
-    var modalBodyContentCategory = $("<div class='form-group'>");
-    var modalBodyContentCategoryLabel = $("<label for='category' class='form-control-label'>").text("Course");
-    var modalBodyContentCategoryValue = $("<input type='text' class='form-control'>").text(studentObj.Course);
-    modalBodyContentCategoryValue.val(studentObj.course);
-    modalBodyContentCategory.append(modalBodyContentCategoryLabel);
-    modalBodyContentCategory.append(modalBodyContentCategoryValue);
+//     var modalBodyContentCategory = $("<div class='form-group'>");
+//     var modalBodyContentCategoryLabel = $("<label for='category' class='form-control-label'>").text("Course");
+//     var modalBodyContentCategoryValue = $("<input type='text' class='form-control'>").text(studentObj.Course);
+//     modalBodyContentCategoryValue.val(studentObj.course);
+//     modalBodyContentCategory.append(modalBodyContentCategoryLabel);
+//     modalBodyContentCategory.append(modalBodyContentCategoryValue);
 
-    var modalBodyContentAmount = $("<div class='form-group'>");
-    var modalBodyContentAmountLabel = $("<label for='amount' class='form-control-label'>").text("Grade");
-    var modalBodyContentAmountValue = $("<input type='text' class='form-control'>").text(studentObj.Grade);
-    modalBodyContentAmountValue.val(studentObj.grade);
-    modalBodyContentAmount.append(modalBodyContentAmountLabel);
-    modalBodyContentAmount.append(modalBodyContentAmountValue);
+//     var modalBodyContentAmount = $("<div class='form-group'>");
+//     var modalBodyContentAmountLabel = $("<label for='amount' class='form-control-label'>").text("Grade");
+//     var modalBodyContentAmountValue = $("<input type='text' class='form-control'>").text(studentObj.Grade);
+//     modalBodyContentAmountValue.val(studentObj.grade);
+//     modalBodyContentAmount.append(modalBodyContentAmountLabel);
+//     modalBodyContentAmount.append(modalBodyContentAmountValue);
 
-    modalBody.append(modalBodyContentStore);
-    modalBody.append(modalBodyContentAmount);
-    modalBody.append(modalBodyContentCategory);
-    modalContent.append(modalBody);
+//     modalBody.append(modalBodyContentStore);
+//     modalBody.append(modalBodyContentAmount);
+//     modalBody.append(modalBodyContentCategory);
+//     modalContent.append(modalBody);
 
-    let modalFooter = $("<div>").addClass("modal-footer");
-    let cancelEditButton = $("<button class='btn btn-secondary' data-dismiss='modal'>");
-    cancelEditButton.text("Cancel");
-    let confirmEditButton = $("<button  class='btn btn-primary' data-dismiss='modal'>");
-    confirmEditButton.on("click", () => {
-          // handleEditClicked(studentObj);
-          CalleditStudentList(studentObj);
-    });
-    confirmEditButton.text("Confirm Edit");
-    modalFooter.append(cancelEditButton);
-    modalFooter.append(confirmEditButton);
-    modalContent.append(modalFooter);
+//     let modalFooter = $("<div>").addClass("modal-footer");
+//     let cancelEditButton = $("<button class='btn btn-secondary' data-dismiss='modal'>");
+//     cancelEditButton.text("Cancel");
+//     let confirmEditButton = $("<button  class='btn btn-primary' data-dismiss='modal'>");
+//     confirmEditButton.on("click", () => {
+//           // handleEditClicked(studentObj);
+//           CalleditStudentList(studentObj);
+//     });
+//     confirmEditButton.text("Confirm Edit");
+//     modalFooter.append(cancelEditButton);
+//     modalFooter.append(confirmEditButton);
+//     modalContent.append(modalFooter);
 
-    modalDialog.append(modalContent);
-    modalFade.append(modalDialog);
+//     modalDialog.append(modalContent);
+//     modalFade.append(modalDialog);
 
-    $(modalFade).modal("show");
-    $(modalFade).on('hidden.bs.modal', () => {
-        $(modalFade).remove();
-    });
-}
+//     $(modalFade).modal("show");
+//     $(modalFade).on('hidden.bs.modal', () => {
+//         $(modalFade).remove();
+//     });
+// }
