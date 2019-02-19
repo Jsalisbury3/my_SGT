@@ -5,6 +5,11 @@
 .modal-grade-regex{
     color:red;
 }
+
+.invalid-feedback{
+    color:red;
+    font-size:9px;
+}
 .glyphicon-trash{
     margin-right:10px;
 }
@@ -12,7 +17,7 @@
 body {
     font-family: "Poppins", sans-serif;
     height: 100vh;
-    font-size:8px;
+    font-size: 10px;
 }
 
 .sign-in-logo {

@@ -8,6 +8,8 @@ function initializeApp(){
       // $('#modal').hide()
       $('.btn-success').click(handleAddClicked);
       $('.btn-primary').click(handleCancelClick);
+      $('#studentGrade').on("change", gradeValidation);
+      $('#studentName').on("change", nameValidation);
       checkAuth();
    
 }
@@ -50,10 +52,11 @@ function addStudent(){
     var studentGrade = parseInt($('#studentGrade').val());
     if(studentName ==='' || studentCourse ===''|| parseFloat(studentGrade<=0) || parseFloat(studentCourse> 100) || isNaN(studentGrade)){
         // alert("invalid input");
-        invalidModal()
+        // invalidModal()
         return;
     }else{
         sendNewStudentData(studentName, studentGrade, studentCourse)
+        clearAddStudentFormInputs();
     }
     // studentArray.push(newStudent);
     // console.log(studentArray);
@@ -66,6 +69,11 @@ function clearAddStudentFormInputs(){
     $('input[name=studentName]').val('').blur();
     $('input[name=course]').val('').blur();
     $('input[name=studentGrade]').val('').blur();
+    $("#gradeDiv").removeClass('has-success');
+    $("#gradeDiv").removeClass('has-error');
+    $("#nameDiv").removeClass('has-success');
+    $("#nameDiv").removeClass('has-error');
+    $(".invalid-feedback").remove();
 }
 
 
@@ -233,6 +241,7 @@ function renderStudentOnDom(studentObj){
     // var receiptData = receiptDataArray[thisRowIndex]
     // var ID = receiptDataArray[thisRowIndex].ID;
     // Modal
+
     $('.modal-grade-regex').hide()
     var modalFade = $("<div class='modal fade' id='editStudentModal' tabindex='-1' role='dialog' aria-labelledby='editStudentModalLabel' aria-hidden='true'  data-backdrop='static' data-keyboard='false'>");
     var modalDialog = $("<div class='modal-dialog' role='document'>");
@@ -245,26 +254,23 @@ function renderStudentOnDom(studentObj){
 
 
     var modalBody = $("<form>").addClass("modal-body");
-    var modalBodyContentStore = $("<div class='form-group'>");
+    var modalBodyContentStore = $("<div id='editNameDiv' class='form-group'>");
     var modalBodyContentStoreNameLabel = $("<label for='store_name' class='form-control-label'>").text("Student Name");
-    console.log(studentObj.name)
-    console.log(studentObj.name)
-    console.log(studentArray)
-    var modalBodyContentStoreName = $("<input type='text' class='form-control'>");
+    var modalBodyContentStoreName = $("<input id='editStudentName' type='text' class='form-control' onChange='nameValidation()'>");
     modalBodyContentStoreName.val(studentObj.Name);
     modalBodyContentStore.append(modalBodyContentStoreNameLabel);
     modalBodyContentStore.append(modalBodyContentStoreName);
 
     var modalBodyContentCategory = $("<div class='form-group'>");
     var modalBodyContentCategoryLabel = $("<label for='category' class='form-control-label'>").text("Course");
-    var modalBodyContentCategoryValue = $("<input type='text' id='editCategory' class='form-control'>");
+    var modalBodyContentCategoryValue = $("<input type='text' id='editCourse' class='form-control'>");
     modalBodyContentCategoryValue.val(studentObj.Course);
     modalBodyContentCategory.append(modalBodyContentCategoryLabel);
     modalBodyContentCategory.append(modalBodyContentCategoryValue);
 
-    var modalBodyContentAmount = $("<div class='form-group'>");
+    var modalBodyContentAmount = $("<div class='form-group' id='editGradeDiv'>");
     var modalBodyContentAmountLabel = $("<label for='amount' class='form-control-label'>").text("Grade");
-    var modalBodyContentAmountValue = $("<input type='text' class='form-control'>")
+    var modalBodyContentAmountValue = $("<input id='editGrade' type='text' class='form-control' onChange='gradeValidation()'>")
     modalBodyContentAmountValue.val(studentObj.Grade);
     var modalGradeRexex = $("p").text("Invalid Grade").addClass('modal-grade-regex')
     modalBodyContentAmount.append(modalBodyContentAmountLabel);
@@ -286,7 +292,7 @@ function renderStudentOnDom(studentObj){
           if(modalBodyContentStoreName.val() ==='' ||  modalBodyContentCategoryValue.val() ===''|| parseFloat( modalBodyContentAmountValue.val()<=0) || parseFloat(modalBodyContentCategoryValue.val()> 100) || isNaN( modalBodyContentAmountValue.val())){
             console.log('yayyyyayayayayayayayayayayay')
             $('.modal-grade-regex').show()
-            alert('Invalid Grade Input')
+            // alert('Invalid Grade Input')
             return;
         }else{
                 CalleditStudentList(studentObj);
@@ -631,6 +637,84 @@ function checkPasswords() {
         return false;
     }
 };
+
+
+function gradeValidation(){
+    let inputFeedback = $("<div class='gradeFeedback'>").addClass("invalid-feedback");
+    const gradeRegex = /^100(\.[0]{1,2})?|([0-9]|[1-9][0-9])(\.[0-9]{1,2})?$/;
+    const grade = $("#studentGrade").val();
+    const editGrade = $("#editGrade").val();
+
+    if(grade){
+        if((!gradeRegex.test(grade) && grade !=='') || parseInt(grade)< 0 || grade ==='' ){
+            if($("gradeDiv").hasClass("has-error")){
+                return
+            }
+            $("#gradeDiv").append(inputFeedback.text("Not a valid Grade"));
+            $("#gradeDiv").addClass("has-error");
+            return;
+        }else{
+            $(".gradeFeedback").remove();
+            $("#gradeDiv").removeClass("has-error");
+            $("#gradeDiv").removeClass("has-warning");
+            $("#gradeDiv").addClass("has-success");
+        }
+    }
+
+    if(editGrade){
+        if((!gradeRegex.test(editGrade) && editGrade !=='') || parseInt(editGrade)<0 || editGrade ==''){
+            if($("#editGradeDiv").hasClass("has-error")){
+                return;
+            }
+            $("#editGradeDiv").append(inputFeedback.text("Not a Valid Number"));
+            $("#editGradeDiv").addClass("has-error");
+            return
+        }else{
+            $(".gradeFeedback").remove();
+            $("#editGradeDiv").removeClass("has-error");
+            $("#editGradeDiv").removeClass("has-warning");
+            $("#editGradeDiv").addClass("has-success");
+        }
+    }
+}
+
+function nameValidation(){
+    inputFeedback2 = $("<div class='studentNameFeedback'>").addClass("invalid-feedback");
+    const studentNameRegex = /^[a-z ,.'-]+$/i;
+    const studentName = $("#studentName").val();
+    const editName = $("#editStudentName").val();
+    if(studentName){
+        if((!studentNameRegex.test(studentName) && studentName !=='' || studentName =='')){
+            if($("#nameDiv").hasClass("has-error")){
+                return;
+            }
+            $("#nameDiv").addClass("has-error");
+            $("#nameDiv").append(inputFeedback2.text("Invalid Student Name"));
+            return;
+        }else{
+            $(".studentNameFeedback").remove();
+            $("#nameDiv").removeClass("has-error");
+            $("#nameDiv").removeClass("has-warning");
+            $("#nameDiv").addClass("has-success");
+        }
+    }
+    if(editName){
+        if(!studentNameRegex.test(editName) && editName!=='' || editName ===''){
+            if($("#editNameDiv").hasClass("has-error")){
+                return
+            }
+            $("#editNameDiv").addClass("has-error");
+            $("#editNameDiv").append(inputFeedback2.text("Invalid Student Name"));
+            return
+        }else{
+            $(".studentNameFeedback").remove();
+            $("#editNameDiv").removeClass("has-error");
+            $("#editNameDiv").removeClass("has-warning");
+            $("#editNameDiv").addClass("has-success");
+            return
+        }
+    }
+}
 
 
 
