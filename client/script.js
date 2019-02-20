@@ -641,7 +641,8 @@ function checkPasswords() {
 
 function gradeValidation(){
     let inputFeedback = $("<div class='gradeFeedback'>").addClass("invalid-feedback");
-    const gradeRegex = /^100(\.[0]{1,2})?|([0-9]|[1-9][0-9])(\.[0-9]{1,2})?$/;
+    // const gradeRegex = /^100(\.[0]{1,2})?|([0-9]|[1-9][0-9])(\.[0-9]{1,2})?$/;
+    gradeRegex = /^[1-9]\d*(\.\d+)?$/;
     const grade = $("#studentGrade").val();
     const editGrade = $("#editGrade").val();
 
@@ -650,6 +651,7 @@ function gradeValidation(){
             if($("gradeDiv").hasClass("has-error")){
                 return
             }
+            $(".gradeFeedback").remove();
             $("#gradeDiv").append(inputFeedback.text("Not a valid Grade"));
             $("#gradeDiv").addClass("has-error");
             return;
@@ -666,6 +668,7 @@ function gradeValidation(){
             if($("#editGradeDiv").hasClass("has-error")){
                 return;
             }
+            $(".gradeFeedback").remove();
             $("#editGradeDiv").append(inputFeedback.text("Not a Valid Number"));
             $("#editGradeDiv").addClass("has-error");
             return
