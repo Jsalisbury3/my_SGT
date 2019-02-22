@@ -6,7 +6,6 @@ var studentArray = [];
 $(document).ready(initializeApp);
 
 function initializeApp(){
-      // $('#modal').hide()
       $('.btn-success').click(handleAddClicked);
       $('.btn-primary').click(handleCancelClick);
       $('#studentGrade').on("change", gradeValidation);
@@ -191,13 +190,40 @@ function renderStudentOnDom(studentObj){
         }
 
         function handleDeleteClicked(){
-            var studentIndex = studentArray.indexOf(studentObj);
-            studentArray.splice(studentIndex, 1);
-            newTableRow.remove();
-            calculateGradeAverage(studentArray);
-            console.log(studentArray)
+            $(".fa-spin").show()
             deleteStudentData(studentObj.ID);
         }
+
+
+        function deleteStudentData(student_id){
+            try{
+            var ajaxDelete = {
+                dataType: 'json',
+                url: "/api/deleteStudent",
+                method: 'post',
+                data: {
+                    id: student_id
+                },
+                error: handleError
+            }
+        
+            $.ajax(ajaxDelete).then(function(response){
+                var studentIndex = studentArray.indexOf(studentObj);
+                studentArray.splice(studentIndex, 1);
+                newTableRow.remove();
+                calculateGradeAverage(studentArray);
+                $(".fa-spin").hide()
+            });
+        
+            }catch(error){
+                handleError(error)
+                $(".fa-spin").hide()
+            }
+        
+        
+        }
+
+
 
 
         var buttonTd = $('<td>').append(deleteButton, editButton);
@@ -325,79 +351,14 @@ function renderStudentOnDom(studentObj){
     });
 
     function CalleditStudentList(studentObj) {
-        console.log(studentObj)
-        // const TR = studentObj.target.parentElement.parentElement;
-        // const name = TR.children[0].childNodes[0].value;
         const name = modalBodyContentStoreName.val()
-        // const course = TR.children[1].childNodes[0].value;
         const course =  modalBodyContentCategoryValue.val()
-        // const grade = TR.children[2].childNodes[0].value;
         const grade = modalBodyContentAmountValue.val();
-        // const id = TR.children[4].childNodes[0].attributes.rowNum.value;
-         
-        // const id = TR.children[3].childNodes[1].attributes.rownum.value;
         const id = studentObj.ID
-        
         calculateGradeAverage(studentArray);
         editStudentList(name, course, grade, id);
     }
     
-    
-    // function editStudentList(name, course, grade, id){
-    //     $(".fa-spin").show()
-    //     try{
-    //     $.ajax({
-    //         dataType: 'json',
-    //         method: "POST",
-    //         url: "/api/UpdateStudent",
-    //         data: {
-    //             name,
-    //             course,
-    //             grade,
-    //             id
-    //         },
-    //         error: handleEditError
-    //     }).then((reponse) => {
-    //         if(reponse.success) {
-    //             $(".fa-spin").hide()
-    //             loadData();
-    //         } else {
-    //             $(".fa-spin").hide()
-              
-    //         }
-    
-    //         })
-    //     }catch{
-    //         $(".fa-spin").hide()
-    //         // failedQueryModal();
-    //         console.log("aerhgneoruhgnaehrbgaeuhrbaerhlaberghearbgeahlr")
-           
-    //     }
-    // }
-
-    // working version
-    // function editStudentList(name, course, grade, id){
-    //     $.ajax({
-    //         dataType: 'json',
-    //         method: "POST",
-    //         url: "/api/UpdateStudent",
-    //         data: {
-    //             name,
-    //             course,
-    //             grade,
-    //             id
-    //         }
-    //     }).then((reponse) => {
-    //         if(reponse.success) {
-    //             loadData();
-    //         } else {
-    //             //handle failed query here
-    //         }
-    
-    //     })
-    // }
-
-
     function editStudentList(name, course, grade, id){
         $(".fa-spin").show()
         try{
@@ -415,8 +376,6 @@ function renderStudentOnDom(studentObj){
             }
             $.ajax(ajaxEdit).then(function(response){
                  loadData();
-                 $(".fa-spin").hide()
-
             })
    
         }catch(error){
@@ -424,61 +383,10 @@ function renderStudentOnDom(studentObj){
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    // working version with no error
-    // function editStudentList(name, course, grade, id){
-    //     $.ajax({
-    //         dataType: 'json',
-    //         method: "POST",
-    //         url: "/api/UpdateStudent",
-    //         data: {
-    //             name,
-    //             course,
-    //             grade,
-    //             id
-    //         }
-    //     }).then((reponse) => {
-    //       loadData();
-    
-    //     })
-    // }
-
-
-
-
-
-
+    }
 
 
 }
-
-
-
-
-    }
-
-   
-
-
-
-
-
-
-
-
-
-
-
 
 function failedQueryModal(){
     var modalFade = $("<div class='modal fade' id='editStudentModal' tabindex='-1' role='dialog' aria-labelledby='editStudentModalLabel' aria-hidden='true' data-backdrop='static' data-keyboard='false'>");
@@ -503,52 +411,6 @@ function failedQueryModal(){
     });
 
 }
-
-
-
-
-
-
-
-// function changeToInputFields(studentObj) {
-//       const TR = studentObj.target.parentElement.parentElement;
-//       TR.children[0].remove();
-//       TR.children[1].remove();
-//       TR.children[0].remove();
-//       let gradeTD = TR.children[0] = document.createElement("td");
-//       let courseTD = TR.children[0] = document.createElement("td");
-//       let nameTD = TR.children[0] = document.createElement("td");
-//       let inputTag1 = document.createElement("input");
-//       let inputTag2 = document.createElement("input");
-//       let inputTag3 = document.createElement("input");
-//       inputTag1.classList.add("col-xs-12");
-//       inputTag2.classList.add("col-xs-12");
-//       inputTag3.classList.add("col-xs-12");
-//       gradeTD.append(inputTag1);
-//       courseTD.append(inputTag2);
-//       nameTD.append(inputTag3);
-//       TR.prepend(gradeTD);
-//       TR.prepend(courseTD);
-//       TR.prepend(nameTD);
-//       $(".edit").off("click");
-//       TR.children[4].childNodes[0].addEventListener("click", CalleditStudentList);
-//   }
-
-
-
-
-
-
-// function handleDeleteClicked(){
-//       var studentIndex = studentArray.indexOf(studentObj);
-//       studentArray.splice(studentIndex, 1);
-//       newTableRow.remove();
-//       calculateGradeAverage(studentArray);
-//       deleteStudentData(studentObj.ID);
-// }
-
-
-
 
 function validation(){
     const tests = [
@@ -656,47 +518,10 @@ function loadData(){
     });
 }
 
-// function sendNewStudentData(name, grade, course){
-//     var ajaxAdd = {
-//         dataType: 'json',
-//         url: "/api/addStudent",
-//         method: 'post',
-//         data:{ name: name, grade: grade, course: course},
-//     }
-
-//     try{
-       
-//         $.ajax(ajaxAdd).then(function(response){
-//                 var studentObj = {
-//                     name: name,
-//                     course: course,
-//                     grade: grade,
-//                     id: response.data.insertId
-//                 }
-
-//                 clearAddStudentFormInputs();
-//                 studentArray.push(studentObj);
-//                 updateStudentList(studentObj);
-//                 loadData();
-//                 console.log(response)
-//         }).catch((err) => {
-//             // never hits this query
-//             console.log("yo")
-//             $(".fa-spin").hide()
-//             failedQueryModal()
-//             })
-//     }
-//     catch{
-//        // always hits this catch
-//        console.log('Hit the catch')
-//     }
-// }
-
 function handleError(theError){
     console.log(theError);
     $(".fa-spin").hide()
     failedQueryModal()
-    console.log("Testing this catch statement ajhgbaubgaesuhrgbaeurgbeahurgbaeurbgeahurgbaeruhgabergkheaubrgeahurgbearg")
 }
 
 function sendNewStudentData(name, grade, course){
@@ -729,30 +554,6 @@ function sendNewStudentData(name, grade, course){
     }catch(error){
         handleError(error);
     }
-}
-
-function deleteStudentData(student_id){
-    try{
-    var ajaxDelete = {
-        dataType: 'json',
-        url: "/api/deleteStudent",
-        method: 'post',
-        data: {
-            id: student_id
-        }
-    }
-
-    $.ajax(ajaxDelete).then(function(response){
-        console.log('deleted new student to database');
-        console.log(response);
-    });
-
-    }catch(error){
-        handleError(error)
-        console.log("delete Catch")
-    }
-
-
 }
 
 function validationSignUp(){
@@ -837,24 +638,6 @@ function gradeValidation(){
     // gradeRegex = /\\d+(?:\\.\\d+)?%/
     const grade = $("#studentGrade").val();
     const editGrade = $("#editGrade").val();
-    console.log("grade length", grade.length)
-
-    // if (grade.length> 5){
-    //     $(".gradeFeedback").remove();
-    //     $("#gradeDiv").removeClass("has-error");
-    //     $("#gradeDiv").removeClass("has-warning");
-    //     $("#gradeDiv").addClass("has-error");
-    //     $("#gradeDiv").append(inputFeedback.text("Grade exceeds maximum length"));
-    //     return;
-    // }
-    // if (editGrade.length> 5){
-    //     $(".gradeFeedback").remove();
-    //     $("#editGradeDiv").removeClass("has-error");
-    //     $("#editGradeDiv").removeClass("has-warning");
-    //     $("#editGradeDiv").addClass("has-error");
-    //     $("#editGradeDiv").append(inputFeedback.text("Grade exceeds maximum length"));
-    //     return;
-    // }
 
     if(grade){
         if((!gradeRegex.test(grade) && grade !=='') || parseInt(grade)< 0 || grade ==='' ){
@@ -896,13 +679,13 @@ function gradeValidation(){
             $("#editGradeDiv").removeClass("has-warning");
             $("#editGradeDiv").addClass("has-success");
         }
-         if (editGrade.length> 5){
-        $(".gradeFeedback").remove();
-        $("#editGradeDiv").removeClass("has-error");
-        $("#editGradeDiv").removeClass("has-warning");
-        $("#editGradeDiv").addClass("has-error");
-        $("#editGradeDiv").append(inputFeedback.text("Grade exceeds maximum length"));
-        return;
+        if (editGrade.length> 5){
+            $(".gradeFeedback").remove();
+            $("#editGradeDiv").removeClass("has-error");
+            $("#editGradeDiv").removeClass("has-warning");
+            $("#editGradeDiv").addClass("has-error");
+            $("#editGradeDiv").append(inputFeedback.text("Grade exceeds maximum length"));
+            return;
         }
     }
 }
@@ -936,7 +719,7 @@ function nameValidation(){
         }
     }
     if(editName){
-        if(!studentNameRegex.test(editName) && editName!=='' || editName ===''){
+        if((!studentNameRegex.test(editName) && editName!=='') || editName ===''){
             if($("#editNameDiv").hasClass("has-error")){
                 return;
             }
@@ -948,7 +731,6 @@ function nameValidation(){
             $("#editNameDiv").removeClass("has-error");
             $("#editNameDiv").removeClass("has-warning");
             $("#editNameDiv").addClass("has-success");
-            // return;
         }
         if(editName.length > 42){
             $(".studentNameFeedback").remove();
@@ -957,110 +739,9 @@ function nameValidation(){
             $("#editNameDiv").addClass("has-error");
             $("#editNameDiv").append(inputFeedback2.text("Student Name exceeds maximum length"));
             return;
-    }
-
-        // if(editName.length > 42){
-        //         $(".studentNameFeedback").remove();
-        //         $("#editNameDiv").removeClass("has-error");
-        //         $("#editNameDiv").removeClass("has-warning");
-        //         $("#editNameDiv").addClass("has-error");
-        //         $("#editNameDiv").append(inputFeedback2.text("Student Name exceeds maximum length"));
-        //         return;
-        // }
-
-        
+        }   
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-// function openModal(){
-
-//       $('#modal').show()
-
-// }
-
-// function hideModal(){
-//       $('#modal').hide()
-// }
-
-
-
-
-// function editModal(studentObj) {
-//     // var thisRowIndex = $(event.currentTarget).attr("data-delete-row")
-//     // var receiptData = receiptDataArray[thisRowIndex]
-//     // var ID = receiptDataArray[thisRowIndex].ID;
-//     // Modal
-//     var modalFade = $("<div class='modal fade' id='editStudentModal' tabindex='-1' role='dialog' aria-labelledby='editStudentModalLabel' aria-hidden='true'  data-backdrop='static' data-keyboard='false'>");
-//     var modalDialog = $("<div class='modal-dialog' role='document'>");
-//     var modalContent = $("<div>").addClass("modal-content");
-//     var modalHeader = $("<div>").addClass("modal-header");
-//     var modalTitle = $("<div>").addClass("modal-title").text("Edit Student");
-
-//     modalHeader.append(modalTitle);
-//     modalContent.append(modalHeader);
-
-
-//     var modalBody = $("<form>").addClass("modal-body");
-//     var modalBodyContentStore = $("<div class='form-group'>");
-//     var modalBodyContentStoreNameLabel = $("<label for='store_name' class='form-control-label'>").text("Student Name");
-//     console.log(studentObj.Name)
-//     var modalBodyContentStoreName = $("<input type='text' class='form-control'>").text(studentObj.Name);
-//     modalBodyContentStoreName.val(studentObj.name);
-//     modalBodyContentStore.append(modalBodyContentStoreNameLabel);
-//     modalBodyContentStore.append(modalBodyContentStoreName);
-
-//     var modalBodyContentCategory = $("<div class='form-group'>");
-//     var modalBodyContentCategoryLabel = $("<label for='category' class='form-control-label'>").text("Course");
-//     var modalBodyContentCategoryValue = $("<input type='text' class='form-control'>").text(studentObj.Course);
-//     modalBodyContentCategoryValue.val(studentObj.course);
-//     modalBodyContentCategory.append(modalBodyContentCategoryLabel);
-//     modalBodyContentCategory.append(modalBodyContentCategoryValue);
-
-//     var modalBodyContentAmount = $("<div class='form-group'>");
-//     var modalBodyContentAmountLabel = $("<label for='amount' class='form-control-label'>").text("Grade");
-//     var modalBodyContentAmountValue = $("<input type='text' class='form-control'>").text(studentObj.Grade);
-//     modalBodyContentAmountValue.val(studentObj.grade);
-//     modalBodyContentAmount.append(modalBodyContentAmountLabel);
-//     modalBodyContentAmount.append(modalBodyContentAmountValue);
-
-//     modalBody.append(modalBodyContentStore);
-//     modalBody.append(modalBodyContentAmount);
-//     modalBody.append(modalBodyContentCategory);
-//     modalContent.append(modalBody);
-
-//     let modalFooter = $("<div>").addClass("modal-footer");
-//     let cancelEditButton = $("<button class='btn btn-secondary' data-dismiss='modal'>");
-//     cancelEditButton.text("Cancel");
-//     let confirmEditButton = $("<button  class='btn btn-primary' data-dismiss='modal'>");
-//     confirmEditButton.on("click", () => {
-//           // handleEditClicked(studentObj);
-//           CalleditStudentList(studentObj);
-//     });
-//     confirmEditButton.text("Confirm Edit");
-//     modalFooter.append(cancelEditButton);
-//     modalFooter.append(confirmEditButton);
-//     modalContent.append(modalFooter);
-
-//     modalDialog.append(modalContent);
-//     modalFade.append(modalDialog);
-
-//     $(modalFade).modal("show");
-//     $(modalFade).on('hidden.bs.modal', () => {
-//         $(modalFade).remove();
-//     });
-// }
-
-
 function failedQueryModal(){
     var modalFade = $("<div class='modal fade' id='editStudentModal' tabindex='-1' role='dialog' aria-labelledby='editStudentModalLabel' aria-hidden='true' data-backdrop='static' data-keyboard='false'>");
     var modalDialog = $("<div class='modal-dialog' role='document'>");
