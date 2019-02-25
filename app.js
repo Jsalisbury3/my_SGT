@@ -88,7 +88,7 @@ webserver.post("/api/UpdateStudent", (request, response) => {
     const id = request.body.id;
     const valuesArray = [name, course, grade, id];
     db.connect(() => {
-        const query = "UPDATE `students`" +
+        const query = "UPDATE `Students`" +
                       " SET Name = ?, Course = ?, Grade = ?" +
                       " WHERE ID = ?";
         const UpdateQuery = mysql.format(query, valuesArray);
