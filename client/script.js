@@ -16,14 +16,14 @@ function checkAuth() {
         loadData();
     } else {
         if(window.location.pathname == "/") {
-            location.replace("http://localhost:7000/signIn.html");
+            location.replace("/signIn.html");
         }
     }
 }
 
 function signOut(){
      localStorage.clear();
-     location.replace("http://localhost:7000/signIn.html") 
+     location.replace("/signIn.html") 
 }
 
 function handleAddClicked(){
@@ -388,7 +388,7 @@ function logUserIn() {
     }).then((response) => {
         if(response.success) {
             localStorage.setItem("token", response.token);
-            location.replace("http://localhost:7000/");
+            location.replace("/");
         } else {
             $('.errorMessage').css("display", "block").css("color", "red").text(response.message);
         }
@@ -527,7 +527,7 @@ function SignUserIn() {
     }).then((response) => {
         if(response.success) {
             localStorage.setItem("token", response.token);
-            location.replace("http://localhost:7000/");
+            location.replace("/");
         } else {
             $('.errorMessageSignUp').css("display", "block").css("color", "red").text(response.message);
         }

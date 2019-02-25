@@ -61,9 +61,7 @@ webserver.post('/api/addStudent', (request,response)=>{
     const course = request.body.course
     db.connect(()=>{
             const addStudentsQuery = "INSERT INTO `Students` SET `Name` = '"+name+"', Grade = '"+grade+"', Course = '"+course+"'";
-            console.log("query: ", addStudentsQuery);
             db.query(addStudentsQuery, (error,data)=>{
-                console.log("data", data)
                 if(!error){
                             const output = {
                                 'success': true,
@@ -126,7 +124,7 @@ webserver.post("/api/LogIn", (request, response) => {
                         success: false,
                         message: "unable to log you in"
                     }
-                    console.log("more than 1 account");
+                    
                     response.send(output);
                 } else {
                     if(UserId.length > 0) {
@@ -136,14 +134,14 @@ webserver.post("/api/LogIn", (request, response) => {
                             success: true,
                             token: token
                         };
-                        console.log("succcceeesss");
+                      
                         response.send(output)
                     } else {
                         const output = {
                             success: false,
                             message: "Invalid username/password"
                         };
-                        console.log("no match");
+                       
                         response.send(output);
                     }
                 }
@@ -152,7 +150,7 @@ webserver.post("/api/LogIn", (request, response) => {
                     success: false,
                     message: "error logging you in"
                 }
-                console.log("og err");
+           
                 response.send(output);
             }
         })
@@ -181,14 +179,14 @@ webserver.post("/api/SignUp", (request, response) => {
                             success: true,
                             token: token
                         };
-                        console.log("made it!");
+                      
                         response.send(output);
                     } else {
                         const output = {
                             success: false,
                             message: "unable to make new account"
                         };
-                        console.log("last err");
+                     
                         response.send(output);
                     }
                 })
@@ -197,7 +195,7 @@ webserver.post("/api/SignUp", (request, response) => {
                     success: false,
                     message: "Email/Password has already been taken",
                 }
-                console.log("not even close");
+               
                 response.send(output);
             }
         })
