@@ -54,9 +54,6 @@ webserver.post('/api/deleteStudent', (request,response)=>{
             })
 });
 
-
-
-
 webserver.post('/api/addStudent', (request,response)=>{
     const name = request.body.name
     console.log(name)
@@ -114,49 +111,6 @@ webserver.post("/api/UpdateStudent", (request, response) => {
     })
 })
 
-
-
-// webserver.post("/api/UpdateStudent", (request, response) => {
-//     const name = request.body.name;
-//     const course = request.body.course;
-//     const grade = request.body.grade;
-//     const id = request.body.id;
-//     const valuesArray = [name, course, grade, id];
-//     db.connect(() => {
-//         const query = "UPDATE `students`" +
-//                       " SET Name = ?, Course = ?, Grade = ?" +
-//                       " WHERE ID = ?";
-//         const UpdateQuery = mysql.format(query, valuesArray);
-//         console.log(UpdateQuery);
-//         db.query(UpdateQuery, (err, data) => {
-//             if(!err) {
-//                 const output = {
-//                     success: true
-//                 };
-//                 response.send(output)
-//             } else {
-//                 const output = {
-//                     success: false
-//                 };
-//                 response.send(output)
-//             }
-//         })
-//     })
-//     const output = {
-//         success: false
-//     };
-//     response.send(output)
-// })
-
-
-
-
-
-
-
-
-
-
 webserver.post("/api/LogIn", (request, response) => {
     const email = request.body.Email;
     const password = request.body.Password;
@@ -205,7 +159,6 @@ webserver.post("/api/LogIn", (request, response) => {
     })
 });
 
-
 webserver.post("/api/SignUp", (request, response) => {
     const email = request.body.Email;
     const password = request.body.Password;
@@ -251,13 +204,9 @@ webserver.post("/api/SignUp", (request, response) => {
     })
 })
 
-
 webserver.listen(7000, () => {
    console.log("listening on port 7000");
 });
-
-
-
 
 function failedQueryModal(){
     var modalFade = $("<div class='modal fade' id='editStudentModal' tabindex='-1' role='dialog' aria-labelledby='editStudentModalLabel' aria-hidden='true' data-backdrop='static' data-keyboard='false'>");

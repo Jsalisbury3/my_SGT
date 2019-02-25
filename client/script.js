@@ -1,9 +1,6 @@
-// import { debug } from "util";
+$(document).ready(initializeApp);
 
 var studentArray = [];
-// var addRow = $("<tr>").addClass('tableRow');
-
-$(document).ready(initializeApp);
 
 function initializeApp(){
       $('.btn-success').click(handleAddClicked);
@@ -12,11 +9,6 @@ function initializeApp(){
       $('#studentName').on("change", nameValidation);
       checkAuth();
       $(".fa-spin").hide()
-   
-}
-
-function addClickHandlersToElements(){
-
 }
 
 function checkAuth() {
@@ -33,25 +25,19 @@ function signOut(){
      localStorage.clear();
      location.replace("http://localhost:7000/signIn.html") 
 }
+
 function handleAddClicked(){
     addStudent();
 }
 
 function handleCancelClick(){
     clearAddStudentFormInputs()
-    // Just reset the value inside the inputs
-    //$('tbody>tr')
 }
 
 function addStudent(){
     var studentName = $('#studentName').val();
     var studentCourse = $('#course').val();
-    // var studentGrade = parseInt($('#studentGrade').val());
     var studentGrade = $('#studentGrade').val();
-    const editGrade = $("#editGrade").val();
-    const editName = $("#editStudentName").val();
-    let inputFeedback = $("<div class='gradeFeedback'>").addClass("invalid-feedback");
-
     if(($("#nameDiv").hasClass("has-error") && $("#gradeDiv").hasClass("has-error"))){
         return;
     }
@@ -69,14 +55,10 @@ function addStudent(){
         return;
     }   
         $(".fa-spin").show()
-        sendNewStudentData(studentName, studentGrade, studentCourse)
-        // clearAddStudentFormInputs();
-    
-  
+        sendNewStudentData(studentName, studentGrade, studentCourse) 
 }
 
 function clearAddStudentFormInputs(){
-    console.log('clear add student');
     $('input[name=studentName]').val('').blur();
     $('input[name=course]').val('').blur();
     $('input[name=studentGrade]').val('').blur();
@@ -89,12 +71,6 @@ function clearAddStudentFormInputs(){
 
 
 function invalidModal() {
-
-    // var thisRowIndex = $(event.currentTarget).attr("data-delete-row")
-    // var ID = receiptDataArray[thisRowIndex].ID;
-
-
-    // Modal
     var modalFade = $("<div class='modal fade' id='editStudentModal' tabindex='-1' role='dialog' aria-labelledby='editStudentModalLabel' aria-hidden='true' data-backdrop='static' data-keyboard='false'>");
     var modalDialog = $("<div class='modal-dialog' role='document'>");
     var modalContent = $("<div>").addClass("modal-content");
@@ -104,21 +80,10 @@ function invalidModal() {
     modalHeader.append(modalTitle);
     modalContent.append(modalHeader);
 
-
     var modalFooter = $("<div>").addClass("modal-footer");
     var cancelDeleteButton = $("<button class='btn btn-secondary' data-dismiss='modal'>");
     cancelDeleteButton.text("Confirm");
-    // var confirmDeleteButton = $("<button class='btn btn-danger' data-dismiss='modal'>");
-
-    // confirmDeleteButton.on("click", () => {
-    //     deleteData(ID);
-    //     deleteReceiptRow(thisRowIndex)
-    //       handleDeleteClicked();
-
-    // });
-    // confirmDeleteButton.text("DELETE");
     modalFooter.append(cancelDeleteButton);
-    // modalFooter.append(confirmDeleteButton);
     modalContent.append(modalFooter);
 
     modalDialog.append(modalContent);
@@ -130,14 +95,7 @@ function invalidModal() {
     });
 }
 
-
-
-
-
-
-
 function renderStudentOnDom(studentObj){
-    console.log(studentObj)
     var nameTableData = $('<td>',{
         class: 'col-xs-3 col-sm-3',
         text: studentObj.Name,
@@ -153,18 +111,14 @@ function renderStudentOnDom(studentObj){
     var courseTableData = $('<td>,',{
         class: 'col-xs-3 col-sm-3',
         text: studentObj.Course,
-        'text-align': 'center'
+        'text-align': 'center',
     })
 
     var deleteButton = $('<button>',{
         class: 'btn btn-danger btn-sm glyphicon glyphicon-trash',
-      //   text: 'Delete',
         'text-align': 'center',
         on: {
-            // click: handleDeleteClicked
             click: deleteModal
-            // click: openModal
-           
         }
     })
 
@@ -174,9 +128,7 @@ function renderStudentOnDom(studentObj){
         'text-align': 'center',
         rowNum: studentObj.ID,
         on: {
-            // click: handleEditClicked
-            click: handleeditModal
-            // click: editModal
+            click: handleEditModal
         }
     })
 
@@ -185,7 +137,7 @@ function renderStudentOnDom(studentObj){
         function handleEditClicked(studentObj){
             changeToInputFields(studentObj);
         }
-        function handleeditModal(studentObj){
+        function handleEditModal(studentObj){
             editModal(studentObj)
         }
 
@@ -223,21 +175,12 @@ function renderStudentOnDom(studentObj){
         
         }
 
-
-
-
         var buttonTd = $('<td>').append(deleteButton, editButton);
         var newTableRow = $('<tr>').append(nameTableData, courseTableData, gradeTableData, buttonTd);
         $('tbody').append(newTableRow);
 
 
         function deleteModal() {
-
-        // var thisRowIndex = $(event.currentTarget).attr("data-delete-row")
-        // var ID = receiptDataArray[thisRowIndex].ID;
-    
-    
-        // Modal
         var modalFade = $("<div class='modal fade' id='editStudentModal' tabindex='-1' role='dialog' aria-labelledby='editStudentModalLabel' aria-hidden='true' data-backdrop='static' data-keyboard='false'>");
         var modalDialog = $("<div class='modal-dialog' role='document'>");
         var modalContent = $("<div>").addClass("modal-content");
@@ -255,8 +198,6 @@ function renderStudentOnDom(studentObj){
     
         confirmDeleteButton.on("click", () => {
                 handleDeleteClicked();
-                // deleteStudentData()
-    
         });
         confirmDeleteButton.text("DELETE");
         modalFooter.append(cancelDeleteButton);
@@ -273,11 +214,6 @@ function renderStudentOnDom(studentObj){
         }
 
   function editModal() {
-    // var thisRowIndex = $(event.currentTarget).attr("data-delete-row")
-    // var receiptData = receiptDataArray[thisRowIndex]
-    // var ID = receiptDataArray[thisRowIndex].ID;
-    // Modal
-
     $('.modal-grade-regex').hide()
     var modalFade = $("<div class='modal fade' id='editStudentModal' tabindex='-1' role='dialog' aria-labelledby='editStudentModalLabel' aria-hidden='true'  data-backdrop='static' data-keyboard='false'>");
     var modalDialog = $("<div class='modal-dialog' role='document'>");
@@ -290,33 +226,33 @@ function renderStudentOnDom(studentObj){
 
 
     var modalBody = $("<form>").addClass("modal-body");
-    var modalBodyContentStore = $("<div id='editNameDiv' class='form-group'>");
-    var modalBodyContentStoreNameLabel = $("<label for='store_name' class='form-control-label'>").text("Student Name");
-    var modalBodyContentStoreName = $("<input id='editStudentName' type='text' class='form-control' onChange='nameValidation()'>");
-    modalBodyContentStoreName.val(studentObj.Name);
-    modalBodyContentStore.append(modalBodyContentStoreNameLabel);
-    modalBodyContentStore.append(modalBodyContentStoreName);
+    var modalEditNameDiv = $("<div id='editNameDiv' class='form-group'>");
+    var modalEditNameLabel = $("<label for='store_name' class='form-control-label'>").text("Student Name");
+    var modalEditName = $("<input id='editStudentName' type='text' class='form-control' onChange='nameValidation()'>");
+    modalEditName.val(studentObj.Name);
+    modalEditNameDiv.append(modalEditNameLabel);
+    modalEditNameDiv.append(modalEditName);
 
-    var modalBodyContentCategory = $("<div class='form-group'>");
-    var modalBodyContentCategoryLabel = $("<label for='category' class='form-control-label'>").text("Course");
-    var modalBodyContentCategoryValue = $("<input type='text' id='editCourse' class='form-control'>");
-    modalBodyContentCategoryValue.val(studentObj.Course);
-    modalBodyContentCategory.append(modalBodyContentCategoryLabel);
-    modalBodyContentCategory.append(modalBodyContentCategoryValue);
+    var modalEditCourseDiv = $("<div class='form-group'>");
+    var modalEditCourseLabel = $("<label for='category' class='form-control-label'>").text("Course");
+    var modalEditCourse = $("<input type='text' id='editCourse' class='form-control'>");
+    modalEditCourse.val(studentObj.Course);
+    modalEditCourseDiv.append(modalEditCourseLabel);
+    modalEditCourseDiv.append(modalEditCourse);
 
-    var modalBodyContentAmount = $("<div class='form-group' id='editGradeDiv'>");
-    var modalBodyContentAmountLabel = $("<label for='amount' class='form-control-label'>").text("Grade");
-    var modalBodyContentAmountValue = $("<input id='editGrade' type='text' class='form-control' onChange='gradeValidation()'>")
-    modalBodyContentAmountValue.val(studentObj.Grade);
+    var modalEditGradeDiv = $("<div class='form-group' id='editGradeDiv'>");
+    var modalEditGradeLabel = $("<label for='amount' class='form-control-label'>").text("Grade");
+    var modalEditGrade = $("<input id='editGrade' type='text' class='form-control' onChange='gradeValidation()'>")
+    modalEditGrade.val(studentObj.Grade);
     var modalGradeRexex = $("p").text("Invalid Grade").addClass('modal-grade-regex')
-    modalBodyContentAmount.append(modalBodyContentAmountLabel);
-    modalBodyContentAmount.append(modalBodyContentAmountValue);
-    modalBodyContentAmount.append(modalGradeRexex);
+    modalEditGradeDiv.append(modalEditGradeLabel);
+    modalEditGradeDiv.append(modalEditGrade);
+    modalEditGradeDiv.append(modalGradeRexex);
 
 
-    modalBody.append(modalBodyContentStore);
-    modalBody.append(modalBodyContentAmount);
-    modalBody.append(modalBodyContentCategory);
+    modalBody.append(modalEditNameDiv);
+    modalBody.append(modalEditGradeDiv);
+    modalBody.append(modalEditCourseDiv);
     modalContent.append(modalBody);
 
     let modalFooter = $("<div>").addClass("modal-footer");
@@ -325,17 +261,12 @@ function renderStudentOnDom(studentObj){
     let confirmEditButton = $("<button  class='btn btn-primary' data-dismiss='modal'>");
     confirmEditButton.on("click", () => {
             /// validation for edit modal
-          if(modalBodyContentStoreName.val() ==='' ||  modalBodyContentCategoryValue.val() ===''|| parseFloat( modalBodyContentAmountValue.val()<=0) || parseFloat(modalBodyContentCategoryValue.val()> 100) || isNaN( modalBodyContentAmountValue.val())){
-            console.log('yayyyyayayayayayayayayayayay')
+          if(modalEditName.val() ==='' ||  modalEditCourse.val() ===''|| parseFloat( modalEditGrade.val()<=0) || parseFloat(modalEditCourse.val()> 100) || isNaN( modalEditGrade.val())){
             $('.modal-grade-regex').show()
-            // alert('Invalid Grade Input')
             return;
         }else{
                 CalleditStudentList(studentObj);
         }
-
-        //   CalleditStudentList(studentObj);
-
     });
     confirmEditButton.text("Confirm Edit");
     modalFooter.append(cancelEditButton);
@@ -351,9 +282,9 @@ function renderStudentOnDom(studentObj){
     });
 
     function CalleditStudentList(studentObj) {
-        const name = modalBodyContentStoreName.val()
-        const course =  modalBodyContentCategoryValue.val()
-        const grade = modalBodyContentAmountValue.val();
+        const name = modalEditName.val()
+        const course =  modalEditCourse.val()
+        const grade = modalEditGrade.val();
         const id = studentObj.ID
         calculateGradeAverage(studentArray);
         editStudentList(name, course, grade, id);
@@ -428,7 +359,6 @@ function validation(){
     ];
 
     if( tests.length === tests.filter( validateInputAndDisplayError).length){
-        console.log("it worked!");
         logUserIn();
     }
 }
@@ -466,10 +396,8 @@ function logUserIn() {
 }
 
 function updateStudentList(updatingStudentArray){
-    console.log(updatingStudentArray);
     $('tbody>tr').remove();
     for(var studentIndex = 0; studentIndex < updatingStudentArray.length; studentIndex++){
-        console.log(updatingStudentArray[studentIndex]);
         renderStudentOnDom(updatingStudentArray[studentIndex]);
     }
     calculateGradeAverage(updatingStudentArray);
@@ -478,11 +406,8 @@ function updateStudentList(updatingStudentArray){
 function calculateGradeAverage(calculateStudentArray){
     var gradeTotal = 0;
     var numberAvg = null;
-    console.log(calculateStudentArray);
     for(var student = 0; student < calculateStudentArray.length; student++){
-        console.log(calculateStudentArray[student]);
         gradeTotal += parseFloat(calculateStudentArray[student].Grade);
-        console.log(gradeTotal);
     }
 
     numberAvg = gradeTotal/calculateStudentArray.length;
@@ -492,7 +417,6 @@ function calculateGradeAverage(calculateStudentArray){
 
 function renderGradeAverage(average){
     if(studentArray.length > 0){
-        // $('.avgGrade').text(average.toFixed(2) + "%");
         $('.avgGrade').text(average.toFixed(2));
     }else{
         $('.avgGrade').text(0);
@@ -501,7 +425,6 @@ function renderGradeAverage(average){
 
 function handleDeleteButton(){
     $(this).closest('tr').remove();
-    console.log(handleDeleteButton);
 }
 
 function loadData(){
@@ -511,7 +434,6 @@ function loadData(){
         method:'post',
     }
     $.ajax(ajaxOptions).then(function(response){
-        console.log(response);
         studentArray = response.data;
         updateStudentList(studentArray)
         $(".fa-spin").hide()
@@ -519,7 +441,6 @@ function loadData(){
 }
 
 function handleError(theError){
-    console.log(theError);
     $(".fa-spin").hide()
     failedQueryModal()
 }
@@ -530,13 +451,9 @@ function sendNewStudentData(name, grade, course){
         dataType: 'json',
         url: "/api/addStudent",
         method: 'post',
-        // timeout: 2000,
         data:{ name: name, grade: grade, course: course},
         error: handleError
     }
-
-  
-       
     $.ajax(ajaxAdd).then(function(response){
         var studentObj = {
             name: name,
@@ -544,12 +461,10 @@ function sendNewStudentData(name, grade, course){
             grade: grade,
             id: response.data.insertId
         }
-
         clearAddStudentFormInputs();
         studentArray.push(studentObj);
         updateStudentList(studentObj);
         loadData();
-        console.log(response)
     })
     }catch(error){
         handleError(error);
@@ -578,7 +493,6 @@ function validationSignUp(){
 
     if( tests.length === tests.filter( validateInputAndDisplayError).length){
         if(checkPasswords()) {
-            console.log("it worked!");
             SignUserIn();
         } else {
             const message = "Both passwords must match!";
@@ -633,9 +547,7 @@ function checkPasswords() {
 
 function gradeValidation(){
     let inputFeedback = $("<div class='gradeFeedback'>").addClass("invalid-feedback");
-    // const gradeRegex = /^100(\.[0]{1,2})?|([0-9]|[1-9][0-9])(\.[0-9]{1,2})?$/;
     const gradeRegex = /^[1-9]\d*(\.\d+)?$/;
-    // gradeRegex = /\\d+(?:\\.\\d+)?%/
     const grade = $("#studentGrade").val();
     const editGrade = $("#editGrade").val();
 
