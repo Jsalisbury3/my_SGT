@@ -1,17 +1,3 @@
-/* html {
-    background-color: #56baed;
-} */
-/* 
-#loadingGif{
-    background: url('loadingGif.gif') no-repeat center center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: 9999999;
-} */
-
 .fa-spin{
     position: absolute;
     left: 41%;
@@ -96,7 +82,6 @@ h2 {
     border-radius: 0 0 10px 10px;
 }
 
-
 h2.inactive {
     color: #cccccc;
 }
@@ -105,6 +90,7 @@ h2.active {
     color: #0d0d0d;
     border-bottom: 2px solid #5fbae9;
 }
+
 input[type=button], input[type=submit], input[type=reset]  {
     background-color: #56baed;
     border: none;
@@ -168,7 +154,6 @@ input[type=text1]:focus {
 input[type=text1]:placeholder {
     color: #cccccc;
 }
-
 
 .fadeInDown {
     -webkit-animation-name: fadeInDown;
@@ -266,7 +251,6 @@ input[type=text1]:placeholder {
 .underlineHover:hover:after{
     width: 100%;
 }
-
 
 *:focus {
     outline: none;

@@ -8,14 +8,11 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
     <meta name="viewport" content="initial-scale=1, user-scalable=no">
-    <link rel="icon" href="/images/table_icon.png">
     <title>Student Grade Table</title>
 </head>
 <body>
         <i class="fa fa-circle-o-notch fa-spin" style="font-size:112px"></i>
-       
-    <div class="row" style="
-    padding: 10px">
+    <div class="row" style="padding: 10px">
         <div class="col-sm-offset-1 col-sm-10">
               <!-- only show this element when the isnt on mobile -->
               <h1 class="visible-sm-md-lg hidden-xs">Student Grade Table
@@ -26,9 +23,6 @@
                 <small class = 'pull-right'>Grade Average : <span class="avgGrade label label-default"></span></small>
             </h3>
         </div>
-
-       
-        
         <div class="student-add-form col-sm-3 col-sm-push-8" id="userDataForms">
             <h4>Add Student</h4>
             
@@ -38,9 +32,6 @@
             </span>
             <input type="text" class="form-control form-rounded input" name="studentName" id="studentName" placeholder="Student Name">
         </div>
-
-
-
         <div class="input-group form-group" id="courseDiv">
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-list-alt"></span>
@@ -48,23 +39,16 @@
             <input type="text" class="form-control form-rounded input" name="course" id="course"
                    placeholder="Student Course">
         </div>
-
-
-
-         <div class="input-group form-group" id="gradeDiv">
+        <div class="input-group form-group" id="gradeDiv">
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-education"></span>
             </span>
             <input type="text" class="form-control form-rounded input" name="studentGrade" id="studentGrade"
                    placeholder="Student Grade"> 
         </div>
-
-       
             <button type="button" class="btn btn-success" onclick="">Add</button>
             <button type="button" class="btn btn-primary" onclick="">Cancel</button>
-            <!-- <button type="button" class="btn-primary" onclick="">Get Data</button> -->
             <a href="./signIn.html"><button type="button" class="btn-info btn" onclick="">Sign Out</button></a>
-            <!-- <button onclick=signOut()>Sign Out</button> -->
         </div>
         <div class="student-list-container col-sm-offset-1 col-sm-7 col-sm-pull-3" style="overflow: scroll">
             <table class="student-list table table-responsive">
@@ -76,28 +60,11 @@
                         <th>Operations</th>
                     </tr>
                 </thead>
-
-                <tbody class="receiptTable">
-
-                </tbody>
+                <tbody class="receiptTable"></tbody>
             </table>
         </div>
-        
     </div>
-
-
-
 </body>
-
-
-
-
-
-
-
-
-
-
 </html>
 
 
